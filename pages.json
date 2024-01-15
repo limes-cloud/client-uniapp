@@ -1,0 +1,63 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index"
+		}, {
+			"path": "pages/index/apps"
+		}, {
+			"path": "pages/index/user"
+		}, {
+			"path": "pages/login/index"
+		}, {
+			"path": "pages/login/bind"
+		}, {
+			"path": "pages/error/index"
+		}, {
+			"path": "pages/app/news/index"
+		}, {
+			"path": "pages/app/news/content"
+		}, {
+			"path": "pages/app/resource/index"
+		}, {
+			"path": "pages/app/resource/content"
+		}, {
+			"path": "pages/app/task/index"
+		}, {
+			"path": "pages/app/task/content"
+		}
+	],
+	"subPackages": [],
+	"globalStyle": {
+		"navigationStyle": "custom",
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uv-ui",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#FFFFFF"
+	},
+	"uniIdRouter": {},
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#d81e06",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"iconPath": "static/tabbar/home.png",
+				"selectedIconPath": "static/tabbar/home-act.png",
+				"text": "首页"
+			}, {
+				"pagePath": "pages/index/apps",
+				"iconPath": "static/tabbar/apps.png",
+				"selectedIconPath": "static/tabbar/apps-act.png",
+				"text": "应用"
+			},
+			{
+				"pagePath": "pages/index/user",
+				"iconPath": "static/tabbar/user.png",
+				"selectedIconPath": "static/tabbar/user-act.png",
+				"text": "个人"
+			}
+		]
+	}
+
+}
