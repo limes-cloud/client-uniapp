@@ -1,6 +1,6 @@
 export default {
 	name: "demo",
-	baseUrl: 'http://localhost:7080',
+	baseUrl: process.env.BASE_URL,
 	platform: {
 		yb: "yb",
 		h5: "h5",

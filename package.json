@@ -1,5 +1,33 @@
 {
-  "dependencies": {
-    "jsencrypt": "^3.3.2"
-  }
+	"dependencies": {
+		"jsencrypt": "^3.3.2"
+	},
+	"uni-app": {
+		"scripts": {
+			"dev": {
+				"title": "开发版",
+				"browser": "chrome",
+				"env": {
+					"UNI_PLATFORM": "h5",
+					"BASE_URL": "http://127.0.0.1:7080"
+				}
+			},
+			"pre": {
+				"title": "测试版",
+				"browser": "chrome",
+				"env": {
+					"UNI_PLATFORM": "h5",
+					"BASE_URL": "http://gw.qlime.cn"
+				}
+			},
+			"prod": {
+				"title": "正式版",
+				"browser": "chrome",
+				"env": {
+					"UNI_PLATFORM": "h5",
+					"BASE_URL": "http://gw.qlime.cn"
+				}
+			}
+		}
+	}
 }
