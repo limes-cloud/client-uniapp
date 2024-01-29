@@ -3,7 +3,7 @@ import repuest from "../request.js"
 
 export const pageTask = (params) => {
 	return repuest({
-		url: "/party_affairs/client/v1/tasks",
+		url: "/party-affairs/client/v1/tasks",
 		method: "get",
 		params
 	})
@@ -11,7 +11,7 @@ export const pageTask = (params) => {
 
 export const getTask = (params) => {
 	return repuest({
-		url: "/party_affairs/client/v1/task",
+		url: "/party-affairs/client/v1/task",
 		method: "get",
 		params
 	})
@@ -19,7 +19,7 @@ export const getTask = (params) => {
 
 export const addTaskContent = (params) => {
 	return repuest({
-		url: "/party_affairs/client/v1/task_content",
+		url: "/party-affairs/client/v1/task_content",
 		method: "post",
 		params
 	})
@@ -27,7 +27,7 @@ export const addTaskContent = (params) => {
 
 export const getTaskContent = (params) => {
 	return repuest({
-		url: "/party_affairs/client/v1/task_content",
+		url: "/party-affairs/client/v1/task_content",
 		method: "get",
 		params
 	})

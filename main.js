@@ -2,6 +2,7 @@ import App from './App'
 import uvUI from '@/uni_modules/uv-ui-tools'
 import requestInterceptors from '@/library/request'
 import mounteGlobal from '@/library/global'
+import setting from '@/library/setting';
 import "@/library/auth/interceptor.js"
 import * as Pinia from 'pinia';
 import {
@@ -21,6 +22,9 @@ export function createApp() {
 	app.use(uvUI, {
 		mpShare: true
 	})
+
+	setting();
+
 	return {
 		app,
 		Pinia,

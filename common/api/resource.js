@@ -2,7 +2,7 @@ import repuest from "../request.js"
 
 export const allResourceClassify = (params) => {
 	return repuest({
-		url: "/party_affairs/client/v1/resource_classify",
+		url: "/party-affairs/client/v1/resource_classify",
 		method: "get",
 		params
 	})
@@ -10,7 +10,7 @@ export const allResourceClassify = (params) => {
 
 export const pageResource = (params) => {
 	return repuest({
-		url: "/party_affairs/client/v1/resource/page",
+		url: "/party-affairs/client/v1/resource/page",
 		method: "get",
 		params
 	})
@@ -18,7 +18,7 @@ export const pageResource = (params) => {
 
 export const getResource = (params) => {
 	return repuest({
-		url: "/party_affairs/client/v1/resource",
+		url: "/party-affairs/client/v1/resource",
 		method: "get",
 		params
 	})

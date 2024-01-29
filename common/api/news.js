@@ -2,7 +2,7 @@ import repuest from "../request.js"
 
 export const allNewsClassify = (params) => {
 	return repuest({
-		url: "/party_affairs/client/v1/news_classify",
+		url: "/party-affairs/client/v1/news_classify",
 		method: "get",
 		params
 	})
@@ -10,7 +10,7 @@ export const allNewsClassify = (params) => {
 
 export const pageNews = (params) => {
 	return repuest({
-		url: "/party_affairs/client/v1/news/page",
+		url: "/party-affairs/client/v1/news/page",
 		method: "get",
 		params
 	})
@@ -18,7 +18,7 @@ export const pageNews = (params) => {
 
 export const getNews = (params) => {
 	return repuest({
-		url: "/party_affairs/client/v1/news",
+		url: "/party-affairs/client/v1/news",
 		method: "get",
 		params
 	})

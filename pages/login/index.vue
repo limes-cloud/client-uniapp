@@ -1,178 +1,186 @@
 <template>
-	<view class="page">
-		<image class="bg1" src="@/static/login/bg1.png"></image>
-		<image class="bg2" src="@/static/login/bg2.png"></image>
-		<view class="logo">
-			<uv-image radius="8rpx" width="280rpx" height="280rpx" :src="useApp.logo"></uv-image>
-			<view class="title">
-				{{ useApp.name }}
-				<text class="font-c">{{ useApp.version }}</text>
-			</view>
-			<view class="desc">
-				{{ useApp.desc }}
-				<text class="line"></text>
-			</view>
-		</view>
+	<view>
+		<uv-navbar placeholder leftIcon title="用户登录"></uv-navbar>
+		<view class="content">
+			<view class="header">
+				<view class="logo">
+					<uv-image radius="8rpx" width="130rpx" height="130rpx" :src="$rurl(useApp.logo)"></uv-image>
+					<view class="tip" v-if="useApp.allow_registry">
+						<text class="disable">没有账号？</text>
+						<text class="primary" @click="register">立即注册</text>
+					</view>
+				</view>
 
-		<view class="login">
-			<uv-button @click="handleLogin" class="button" type="primary" :plain="true" text="授权登录"></uv-button>
+				<view class="app">
+					<view class="title">登录 {{ useApp.name }}</view>
+					<view class="desc">
+						{{ useApp.description }}
+					</view>
+				</view>
+				<view class="login">
+					<uv-list :customStyle="{ gap: '20rpx' }" padding="30rpx">
+						<template v-if="!loading && suggestLoggin.name">
+							<uv-list-item
+								@click="handleLogin"
+								clickable
+								:title="suggestLoggin.name + '登录'"
+								:thumb="$rurl(suggestLoggin.logo)"
+								thumb-size="lg"
+								show-arrow
+								:customStyle="{ backgroundColor: '#f4f5f9' }"
+								rightText="推荐"
+							></uv-list-item>
+						</template>
+						<template v-for="(item, index) in useApp.channels" :key="index">
+							<template v-if="['password', 'captcha'].includes(item.platform)">
+								<uv-list-item
+									:title="item.name + '登录'"
+									:thumb="$rurl(item.logo)"
+									thumb-size="lg"
+									show-arrow
+									link
+									:to="'/pages/login/' + item.platform"
+									:customStyle="{ backgroundColor: '#f4f5f9' }"
+								></uv-list-item>
+							</template>
+						</template>
+					</uv-list>
+				</view>
+				<view class="privacy-policy">
+					<AgreementRadio
+						v-if="!loading"
+						v-model="privacyPolicy"
+						:agreements="scene.agreements"
+					></AgreementRadio>
+				</view>
+				<view v-if="useApp.channels.length - 2 > 0 && loginInfo.platform == 'h5'">
+					<uv-divider text="其他登录方式"></uv-divider>
+					<uv-grid :border="false" :col="useApp.channels.length - 2">
+						<template v-for="(item, index) in useApp.channels" :key="index">
+							<uv-grid-item v-if="!['password', 'captcha'].includes(item.platform)">
+								<view class="oauth">
+									<uv-image
+										radius="8rpx"
+										width="60rpx"
+										height="60rpx"
+										:src="$rurl(item.logo)"
+									></uv-image>
+									<text class="desc">{{ item.name }}</text>
+								</view>
+							</uv-grid-item>
+						</template>
+					</uv-grid>
+				</view>
+			</view>
+
+			<uv-loading-page :loading="loading" loading-mode="semicircle"></uv-loading-page>
+			<uv-toast ref="toast"></uv-toast>
+			<uv-no-network></uv-no-network>
 		</view>
-		<uv-toast ref="toast"></uv-toast>
-		<uv-no-network></uv-no-network>
 	</view>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import { login } from '@/common/api/auth.js';
-import { getLoginPlatform, setToken } from '@/library/auth';
+import { ref, reactive, onMounted, watch } from 'vue';
+import { getLoginScene } from '@/common/api/system/scene';
+import { getPlatform, setToken } from '@/library/auth';
 import { useAppStore } from '@/library/store/app';
 import { useUserStore } from '@/library/store/user';
+import { nav } from '@/library/nav';
+import AgreementRadio from './agreement/agreement-radio.vue';
+
 const toast = ref();
 const useApp = useAppStore();
 const useUser = useUserStore();
+
 const loginInfo = {
 	code: useUser.loginCode,
-	platform: getLoginPlatform()
+	platform: getPlatform()
+};
+const scene = ref(null);
+const loading = ref(true);
+const suggestLoggin = ref({});
+const privacyPolicy = ref(false);
+
+const handleSuggestLoggin = () => {
+	useApp.channels.forEach((item) => {
+		if (item.platform === loginInfo.platform) {
+			suggestLoggin.value = item;
+		}
+	});
 };
 
-// 登录
+// 快捷登录
 const handleLogin = async () => {
 	toast.value.show({ type: 'loading', message: '正在登录中', duration: 10 * 1000 });
 	if (!loginInfo) {
-		uni.redirectTo({ url: '/pages/error/index?text=授权信息错误，请退出重新登录！' });
+		nav.error('授权信息错误，请退出重新登录！');
 		return;
 	}
 
 	const data = await login({ ...loginInfo });
 	setToken(data.token);
+	nav.home();
 	uni.switchTab({ url: '/pages/index/index' });
 };
 
-//易班回调，自动登录
-onMounted(() => {
-	if (useUser.loginStatus) {
-		return;
-	}
-	useUser.setLoginStatus(true);
-	if (loginInfo) {
+const register = () => {
+	uni.navigateTo({
+		url: '/pages/login/register/index'
+	});
+};
+
+//自动登录回调，自动登录
+onMounted(async () => {
+	handleSuggestLoggin();
+	if (loginInfo.code) {
 		handleLogin();
 	}
+	scene.value = await getLoginScene();
+	loading.value = false;
 });
 </script>
 
-<style lang="less" scoped>
-.page {
-	height: 100vh;
-	overflow: hidden;
-	position: relative;
-	.bg1 {
-		position: absolute;
-		width: 400rpx;
-		top: -200rpx;
-		right: 0rpx;
+<style lang="scss" scoped>
+.content {
+	padding: 0px 30rpx;
+	.header {
+		.logo {
+			padding: 30rpx 0px;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			.tip {
+				.disable {
+					color: #999;
+				}
+				.primary {
+					color: #165dff;
+				}
+			}
+		}
 	}
-	.bg2 {
-		position: absolute;
-		width: 400rpx;
-		height: 420rpx;
-		bottom: -200rpx;
-		left: -150rpx;
-	}
-	.logo {
-		width: 100%;
-		height: calc(100vh - 300rpx - 44px);
-		overflow: hidden;
-		padding: 0 50rpx;
-		box-sizing: border-box;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
+	.app {
+		margin-top: 20rpx;
 		.title {
-			display: block;
-			font-size: 46rpx;
-			font-weight: 600;
-			margin-top: 20rpx;
-			margin-bottom: 5px;
+			font-size: 38rpx;
 		}
-
 		.desc {
-			font-size: 28rpx;
-			color: #555;
-			position: relative;
-		}
-
-		.line {
-			position: absolute;
-			left: 0px;
-			top: 1px;
-			display: block;
-			width: 10px;
-			height: 20px;
-			border-radius: 50%;
-			box-shadow: 0px 0px 20px #fff;
-			background: rgba(255, 255, 255, 0.7);
-			animation: line 10s linear infinite;
-		}
-
-		.font-c {
-			color: transparent;
-			-webkit-background-clip: text;
-			animation: ran 20s linear infinite;
+			color: #999;
 		}
 	}
-
 	.login {
-		width: 100%;
-		font-size: 36rpx;
-		color: #2979ff;
+		padding: 30rpx 0rpx;
+	}
+	.privacy-policy {
+		margin-bottom: 60rpx;
+	}
+	.oauth {
 		text-align: center;
-		.button {
-			width: 280rpx;
-			margin: auto;
+		.desc {
+			line-height: 50rpx;
 		}
-	}
-}
-@keyframes ran {
-	0% {
-		background-image: linear-gradient(45deg, #abdcff 10%, #0396ff 100%);
-		backgroud-position: 0 0;
-	}
-
-	20% {
-		background-image: linear-gradient(45deg, #90f7ec 10%, #32ccbc 100%);
-		background-position: 20px 0;
-	}
-
-	40% {
-		background-image: linear-gradient(45deg, #feb692 10%, #ea5455 100%);
-		background-position: 40px 0;
-	}
-
-	60% {
-		background-image: linear-gradient(45deg, #ce9ffc 10%, #7367f0 100%);
-		background-position: 60px 0;
-	}
-
-	80% {
-		background-image: linear-gradient(45deg, #e2b0ff 10%, #9f44d3 100%);
-		background-position: 80px 0;
-	}
-
-	100% {
-		background-image: linear-gradient(45deg, #fad7a1 10%, #e96d71 100%);
-		background-position: 100px 0;
-	}
-}
-
-@keyframes line {
-	form {
-		left: 0px;
-	}
-
-	to {
-		left: 200px;
 	}
 }
 </style>

@@ -1,21 +1,16 @@
 <template>
+	<uv-navbar autoBack border placeholder :title="title"></uv-navbar>
 	<view>
-		<uv-no-network></uv-no-network>
-		<uv-navbar autoBack border placeholder :title="title"></uv-navbar>
 		<view class="content" v-if="data">
 			<view class="title">
 				{{ data.title }}
 			</view>
-			<view class="unit-info">
-				<text class="unit">{{ data.unit }}</text>
-				<text class="time">{{ $ft(data.created_at) }}</text>
-			</view>
 			<view class="u-content">
 				<uv-parse :content="data.content"></uv-parse>
 			</view>
-			<view class="u-font-sm read">阅读：{{ data.read }}</view>
 		</view>
 	</view>
+	<uv-no-network></uv-no-network>
 </template>
 
 <script setup>

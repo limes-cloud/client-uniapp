@@ -17,10 +17,10 @@ export function removeToken() {
 	return uni.removeStorageSync(TokenKey)
 }
 
-export function setLoginPlatform(platform) {
+export function setPlatform(platform) {
 	return uni.setStorageSync(PlatformKey, platform)
 }
 
-export function getLoginPlatform() {
+export function getPlatform() {
 	return uni.getStorageSync(PlatformKey)
 }

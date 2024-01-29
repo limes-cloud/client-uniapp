@@ -13,11 +13,11 @@
 		:confirmText="confirmText"
 		:cancelColor="cancelColor"
 		:confirmColor="confirmColor"
-		:round="round"
 		@close="close"
 		@cancel="cancel"
 		@confirm="confirm"
 		@change="change"
+		:round="round"
 	>
 	</uv-picker>
 </template>

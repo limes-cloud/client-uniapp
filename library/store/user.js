@@ -4,13 +4,12 @@ import {
 
 import {
 	currentUser
-} from "@/common/api/user.js";
+} from "@/common/api/system/user";
 
 export const useUserStore = defineStore('user', {
 	state: () => {
 		return {
 			loginCode: "",
-			loginStatus: false,
 			name: "",
 			nickname: "",
 			phone: "",
@@ -30,9 +29,6 @@ export const useUserStore = defineStore('user', {
 		},
 		setInfo(partial) {
 			this.$patch(partial);
-		},
-		setLoginStatus(status) {
-			this.loginStatus = status
 		},
 	},
 });

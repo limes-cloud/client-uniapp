@@ -9,7 +9,17 @@
 		}, {
 			"path": "pages/login/index"
 		}, {
-			"path": "pages/login/bind"
+			"path": "pages/login/password"
+		}, {
+			"path": "pages/login/captcha"
+		}, {
+			"path": "pages/login/agreement/index"
+		}, {
+			"path": "pages/login/register/index"
+		}, {
+			"path": "pages/login/register/captcha"
+		}, {
+			"path": "pages/login/register/password"
 		}, {
 			"path": "pages/error/index"
 		}, {

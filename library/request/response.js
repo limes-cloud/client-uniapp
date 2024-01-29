@@ -5,13 +5,16 @@
 
 import {
 	refreshToken,
-} from "@/common/api/auth"
+} from "@/common/api/system/auth"
 
 import {
 	hasToken,
 	removeToken,
 	setToken
 } from "@/library/auth"
+import {
+	useAppStore
+} from "@/library/store/app"
 
 // 是否正在刷新的标记
 let isRefresh = false;
@@ -29,9 +32,8 @@ export default (vm) => {
 		if (response.statusCode === 401) {
 			// 未绑定处理
 			if (data.reason === 'UnBindError') {
-				uni.redirectTo({
-					url: "/pages/login/bind"
-				})
+				const appStore = useAppStore();
+				appStore.navLogin();
 				return new Promise(() => {})
 			}
 

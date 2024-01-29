@@ -1,5 +1,5 @@
 import {
-	getLoginPlatform
+	getPlatform
 } from "@/library/auth"
 import config from "@/common/config.js"
 export function toUrlQuery(obj) {
@@ -90,7 +90,7 @@ export function downloadFile(url) {
 	// #endif
 
 	// #ifdef H5
-	const platform = getLoginPlatform()
+	const platform = getPlatform()
 	if (platform == config.platform.yiban) {
 		console.log(ybDownload)
 		ybDownload(url)
