@@ -94,6 +94,7 @@ import { registerByPassword, registerImageCaptcha, registerUsernameCheck } from 
 import { getRegisterScene } from '@/common/api/system/scene';
 import { useAppStore } from '@/library/store/app';
 import { useUserStore } from '@/library/store/user';
+import { setToken } from '@/library/auth';
 import { nav } from '@/library/nav';
 import AgreementRadio from '../agreement/agreement-radio.vue';
 
@@ -193,7 +194,7 @@ const submit = async () => {
 		return;
 	}
 	await formRef.value.validate();
-	await registerByPassword({ ...form.value })
+	registerByPassword({ ...form.value })
 		.then((res) => {
 			setToken(res.token);
 			nav.home();

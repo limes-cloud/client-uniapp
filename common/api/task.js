@@ -16,19 +16,3 @@ export const getTask = (params) => {
 		params
 	})
 }
-
-export const addTaskContent = (params) => {
-	return repuest({
-		url: "/party-affairs/client/v1/task_content",
-		method: "post",
-		params
-	})
-}
-
-export const getTaskContent = (params) => {
-	return repuest({
-		url: "/party-affairs/client/v1/task_content",
-		method: "get",
-		params
-	})
-}
