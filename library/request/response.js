@@ -16,6 +16,10 @@ import {
 	useAppStore
 } from "@/library/store/app"
 
+import {
+	nav
+} from "@/library/nav"
+
 // 是否正在刷新的标记
 let isRefresh = false;
 // 重试队列，每一项将是一个待执行的函数形式
@@ -32,8 +36,7 @@ export default (vm) => {
 		if (response.statusCode === 401) {
 			// 未绑定处理
 			if (data.reason === 'UnBindError') {
-				const appStore = useAppStore();
-				appStore.navLogin();
+				nav.login();
 				return new Promise(() => {})
 			}
 
@@ -42,6 +45,7 @@ export default (vm) => {
 				return Promise.reject(data)
 			}
 
+			return new Promise(() => {})
 			// token认证失败处理
 			if (data.reason === 'UNAUTHORIZED' && hasToken()) {
 				if (!isRefresh) {
@@ -55,11 +59,8 @@ export default (vm) => {
 							return uni.$uv.http.request(response.config);
 						})
 						.catch((e) => {
-							console.log("catch")
 							removeToken()
-							uni.reLaunch({
-								url: "/pages/login/index"
-							})
+							nav.login();
 							return new Promise(() => {})
 						})
 						.finally(() => {
@@ -74,9 +75,7 @@ export default (vm) => {
 				});
 			}
 
-			uni.reLaunch({
-				url: "/pages/login/index"
-			})
+			nav.login();
 			return new Promise(() => {})
 		}
 
