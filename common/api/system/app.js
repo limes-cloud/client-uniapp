@@ -6,3 +6,10 @@ export const getAppInfo = () => {
 		method: "get"
 	})
 }
+
+// export const extraFields = () => {
+// 	return repuest({
+// 		url: "/user-center/client/v1/fields",
+// 		method: "get"
+// 	})
+// }

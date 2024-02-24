@@ -1,5 +1,6 @@
 export default {
-	name: "demo",
+	name: "party-affairs",
+	server: "UserCenter",
 	baseUrl: process.env.BASE_URL,
 	platform: {
 		yb: "yb",
@@ -7,7 +8,7 @@ export default {
 		qq: "qq",
 		wx: "wx"
 	},
-	scene: {
+	agreement: {
 		login: "login",
 		register: "register"
 	},

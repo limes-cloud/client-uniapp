@@ -1,7 +1,9 @@
 <template>
-	<view class="error">
-		<uv-no-network></uv-no-network>
-		<image src="@/static/error/error.png"></image>
+	<view class="tip">
+		<view class="error" :style="{ width: size + 'rpx', height: size + 'rpx' }">
+			<uv-no-network></uv-no-network>
+			<image src="@/static/error/error.png"></image>
+		</view>
 		<div class="text">{{ text }}</div>
 	</view>
 </template>
@@ -11,27 +13,26 @@ defineProps({
 	text: {
 		type: String,
 		default: '暂无数据'
+	},
+	size: {
+		type: Number,
+		default: () => 280
 	}
 });
 </script>
 
 <style lang="less" scoped>
-.error {
-	height: 100vh;
-	overflow: hidden;
+.tip {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	width: 100%;
 	image {
-		margin-top: 200rpx;
-		width: 600rpx;
-		height: 600rpx;
+		width: 100%;
+		height: 100%;
 	}
 	.text {
-		font-size: 32rpx;
 		color: #333;
-		font-weight: 700;
 	}
 }
 </style>

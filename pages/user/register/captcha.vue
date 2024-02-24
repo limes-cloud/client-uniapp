@@ -10,11 +10,11 @@
 				</view>
 			</view>
 
-			<view class="login">
+			<view class="login form">
 				<uv-form labelPosition="left" :model="form" :rules="rules" ref="formRef" labelWidth="0">
-					<uv-form-item prop="email">
+					<uv-form-item prop="username">
 						<uv-input
-							v-model="form.email"
+							v-model="form.username"
 							placeholder="请输入邮箱"
 							prefix-icon="email"
 							:customStyle="{ padding: '16rpx 10rpx' }"
@@ -50,11 +50,11 @@
 						</uv-input>
 					</uv-form-item>
 
-					<uv-form-item v-if="scene">
+					<uv-form-item v-if="agreement">
 						<AgreementRadio
 							ref="arRef"
 							v-model="privacyPolicy"
-							:agreements="scene.agreements"
+							:agreements="agreement.contents"
 						></AgreementRadio>
 					</uv-form-item>
 					<uv-form-item>
@@ -78,8 +78,8 @@
 
 <script setup>
 import { ref, reactive, onMounted, watch } from 'vue';
-import { getRegisterScene } from '@/common/api/system/scene';
-import { registerEmailCaptcha, registerByEmail } from '@/common/api/system/auth';
+import { getRegisterAgreement } from '@/common/api/system/agreement';
+import { captchaRegisterEmail, captchaRegister } from '@/common/api/system/auth';
 import { setToken } from '@/library/auth';
 import { useAppStore } from '@/library/store/app';
 import { nav } from '@/library/nav';
@@ -87,7 +87,7 @@ import AgreementRadio from '../agreement/agreement-radio.vue';
 
 const captchaSecond = ref(60);
 const arRef = ref(null);
-const scene = ref(null);
+const agreement = ref(null);
 const props = defineProps({ id: String });
 const toast = ref();
 const appStore = useAppStore();
@@ -97,13 +97,13 @@ const uCodeTips = ref('');
 const privacyPolicy = ref(false);
 const formRef = ref(null);
 const form = ref({
-	email: '',
+	username: '',
 	captcha: '',
 	captcha_id: '',
 	app: appStore.keyword
 });
 const rules = ref({
-	email: {
+	username: {
 		type: 'email',
 		required: true,
 		message: '请输入邮箱',
@@ -118,7 +118,7 @@ const rules = ref({
 });
 
 const getAgreementList = async () => {
-	scene.value = await getRegisterScene();
+	agreement.value = await getRegisterAgreement();
 };
 
 getAgreementList();
@@ -128,13 +128,13 @@ const codeChange = (text) => {
 };
 
 const getCode = async () => {
-	if (!form.value.email) {
+	if (!form.value.username) {
 		toast.value.error('请先输入邮箱');
 		return;
 	}
-	const isEmail = uni.$uv.test.email(form.value.email);
+	const isEmail = uni.$uv.test.email(form.value.username);
 	if (uCode.value.canGetCode && isEmail) {
-		const data = await registerEmailCaptcha(form.value.email);
+		const data = await captchaRegisterEmail(form.value.username);
 		form.value.captcha_id = data.id;
 		captchaSecond.value = data.expire;
 		toast.value.success('验证码已发送');
@@ -156,7 +156,7 @@ const submit = async () => {
 		toast.value.error('请先获取验证码');
 		return;
 	}
-	const res = await registerByEmail({ ...form.value });
+	const res = await captchaRegister({ ...form.value });
 	setToken(res.token);
 	nav.home();
 };

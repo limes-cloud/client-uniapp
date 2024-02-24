@@ -3,7 +3,7 @@
 		<uv-no-network></uv-no-network>
 		<uv-navbar autoBack border placeholder title="任务详情"></uv-navbar>
 		<uv-toast ref="toast"></uv-toast>
-		<!-- <uv-loading-page :loading="loading" loading-mode="semicircle"></uv-loading-page> -->
+
 		<view class="content">
 			<template v-if="!loading">
 				<template v-if="hasProcess()">
@@ -11,11 +11,15 @@
 					<view class="desc">
 						<view v-for="(ite, ind) in data.desc.split('\n')" :key="ind">{{ ite }}</view>
 					</view>
-					<me-form :value="formModel" :components="components" @submit="formSubmit"></me-form>
+					<me-form
+						:id="data.title"
+						:files="files"
+						:value="formModel"
+						:components="components"
+						@submit="formSubmit"
+					></me-form>
 				</template>
-				<template v-else>
-					<me-tip :text="tip"></me-tip>
-				</template>
+				<uv-empty v-else mode="data" style="margin-top: 200rpx" :text="tip"></uv-empty>
 			</template>
 		</view>
 	</view>
@@ -25,7 +29,8 @@
 import { ref } from 'vue';
 import { addTaskValue, getTaskValue, updateTaskValue } from '@/common/api/taskValue.js';
 import { getTask } from '@/common/api/task.js';
-
+import { getBySha } from '@/common/api/system/resource';
+import formatUrl from '@/library/global/resource.js';
 const toast = ref();
 const loading = ref(true);
 const tip = ref('');
@@ -34,14 +39,15 @@ const props = defineProps({ id: String });
 const data = ref();
 const formModel = ref({});
 const isWrite = ref(false);
+const files = ref({});
 
 const fetchData = async () => {
 	const data = await getTaskValue({ task_id: props.id });
-	if (data) {
+	if (data && data.value) {
 		formModel.value = JSON.parse(data.value);
 		isWrite.value = true;
 	}
-	loading.value = false;
+	files.value = await handleFiles(components.value, formModel.value);
 };
 
 getTask({ id: props.id }).then((res) => {
@@ -50,6 +56,27 @@ getTask({ id: props.id }).then((res) => {
 	components.value = config;
 	fetchData();
 });
+
+const handleFiles = async (components, formValue) => {
+	const fileset = {};
+	const taskArr = [];
+	for (let i in components) {
+		const item = components[i];
+		if (item.type === 'upload' && formValue[item.field]) {
+			const data = await getBySha(formValue[item.field]);
+			fileset[item.field] = [
+				{
+					name: data.name,
+					url: formatUrl(data.src),
+					sha: data.sha
+				}
+			];
+		}
+	}
+
+	files.value = fileset;
+	loading.value = false;
+};
 
 const hasProcess = () => {
 	const nt = new Date().getTime() / 1000;

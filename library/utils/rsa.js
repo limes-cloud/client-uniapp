@@ -1,4 +1,4 @@
-import JSEncrypt from 'jsencrypt/bin/jsencrypt';
+import JSEncrypt from 'jsencrypt/bin/jsencrypt.min';
 
 import config from "@/common/config.js"
 

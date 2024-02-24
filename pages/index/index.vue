@@ -1,106 +1,191 @@
 <template>
 	<view>
 		<uv-no-network></uv-no-network>
-		<uv-navbar border placeholder leftIcon title="首页"></uv-navbar>
+		<uv-navbar border placeholder leftIcon="" title="首页"></uv-navbar>
+		<!-- <view class="content">	 -->
+		<uv-swiper
+			:list="bannerList"
+			keyName="image"
+			height="350rpx"
+			radius="0"
+			showTitle
+			circular
+			:titleStyle="{ paddingLeft: '20rpx' }"
+			@click="handleClickBanner"
+		></uv-swiper>
+		<!-- </view> -->
+		<uv-gap height="10" bgColor="#f2f2f2"></uv-gap>
 		<view class="content">
-			<view>
-				<uv-swiper :list="bannerList" keyName="image" height="400rpx" showTitle circular :titleStyle="{ paddingLeft: '20rpx' }"></uv-swiper>
-			</view>
-			<view class="card">
-				<view class="item">
-					<view class="title-box">
-						<text class="title">校园新闻</text>
-						<text class="sub-title">School News</text>
+			<view class="card-head">
+				<view class="title">
+					<view class="icon">
+						<uv-icon size="35" :name="noticeLogo"></uv-icon>
 					</view>
-					<me-tip v-if="!newsList.length" type="empty" title="暂无校园新闻" size="small"></me-tip>
-					<template v-for="item in newsList" :key="item.id" @click="handleClickNews(item)">
-						<view class="news-card">
-							<view class="title uv-line-1">{{ item.title }}</view>
-							<text class="sub-title uv-line-2">{{ item.desc }}</text>
-							<view class="image">
-								<uv-image width="100%" height="300rpx" radius="4" lazyLoad observeLazyLoad :src="item.image"></uv-image>
-							</view>
-							<view class="footer">
-								<text>{{ item.unit }}</text>
-								<text class="time">{{ $ft(item.created_at) }}</text>
-							</view>
-						</view>
-					</template>
+					<view class="text">
+						<text class="m-text">未读通知</text>
+						<text class="sub-text">Todo Task</text>
+					</view>
 				</view>
+				<view class="more" @click="nav.notice()">
+					<text class="text">更多</text>
+					<uv-icon color="#3c9cff" name="arrow-right"></uv-icon>
+				</view>
+			</view>
+			<view>
+				<uv-empty v-if="!noticeList.length" mode="list" text="暂无未读通知"></uv-empty>
+				<NoticeCard :list="noticeList"></NoticeCard>
+			</view>
+		</view>
+		<uv-gap height="10" bgColor="#f2f2f2"></uv-gap>
+		<view class="content">
+			<view class="card-head">
+				<view class="title">
+					<view class="icon">
+						<uv-icon size="35" :name="taskLogo"></uv-icon>
+					</view>
+					<view class="text">
+						<text class="m-text">待办任务</text>
+						<text class="sub-text">Todo Task</text>
+					</view>
+				</view>
+				<view class="more">
+					<text class="text">更多</text>
+					<uv-icon color="#3c9cff" name="arrow-right"></uv-icon>
+				</view>
+			</view>
+			<view class="task-content">
+				<uv-empty v-if="!taskList.length" mode="list" text="暂无待办任务"></uv-empty>
+				<TaskCard :list="taskList"></TaskCard>
+			</view>
+		</view>
+		<uv-gap height="10" bgColor="#f2f2f2"></uv-gap>
+		<view class="content">
+			<view class="card-head">
+				<view class="title">
+					<view class="icon">
+						<uv-icon size="35" :name="studyLogo"></uv-icon>
+					</view>
+					<view class="text">
+						<text class="m-text">学习任务</text>
+						<text class="sub-text">Todo Task</text>
+					</view>
+				</view>
+				<view class="more">
+					<text class="text">更多</text>
+					<uv-icon color="#3c9cff" name="arrow-right"></uv-icon>
+				</view>
+			</view>
+		</view>
+		<uv-gap height="10" bgColor="#f2f2f2"></uv-gap>
+		<view class="content">
+			<view class="card-head">
+				<view class="title">
+					<view class="icon">
+						<uv-icon size="35" :name="newsLogo"></uv-icon>
+					</view>
+					<view class="text">
+						<text class="m-text">党务新闻</text>
+						<text class="sub-text">Party Affairs News</text>
+					</view>
+				</view>
+				<view class="more">
+					<text class="text" @click="nav.news()">更多</text>
+					<uv-icon color="#3c9cff" name="arrow-right"></uv-icon>
+				</view>
+			</view>
+			<view>
+				<uv-empty v-if="!newsList.length" mode="news" text="暂未发布新闻"></uv-empty>
+				<NewsCard :list="newsList"></NewsCard>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script setup>
-import { ref, getCurrentInstance } from 'vue';
+import noticeLogo from '@/static/app-icon/notice.png';
+import taskLogo from '@/static/app-icon/task.png';
+import studyLogo from '@/static/app-icon/study.png';
+import newsLogo from '@/static/app-icon/news.png';
+import formatUrl from '@/library/global/resource.js';
+import NewsCard from '@/pages/app/news/card.vue';
+import NoticeCard from '@/pages/app/notice/card.vue';
+import TaskCard from '@/pages/app/task/card.vue';
+
+import { ref } from 'vue';
 import { allBanner } from '@/common/api/banner.js';
-import { pageNews } from '@/common/api/news.js';
-const { proxy } = getCurrentInstance();
+import { pageNewsContent } from '@/common/api/news.js';
+import { nav } from '@/library/nav';
+import { pageNotice } from '@/common/api/notice';
+import { pageTask } from '../../common/api/task';
+
 const bannerList = ref([]);
+const noticeList = ref([]);
 const newsList = ref([]);
+const taskList = ref([]);
 
 allBanner().then((res) => {
 	res.list.forEach((item, index) => {
-		res.list[index].image = proxy.$rurl(item.resource.src, 300, 200);
+		res.list[index].image = formatUrl(item.resource.src, 300, 200);
 	});
 	bannerList.value = res.list;
 });
 
-pageNews({ page: 1, page_size: 10 }).then((res) => {
-	res.list.forEach((item, index) => {
-		res.list[index].image = proxy.$rurl(item.resource.src, 300, 200);
-	});
+pageNewsContent({ page: 1, page_size: 3 }).then((res) => {
 	newsList.value = res.list;
 });
 
-const handleClickNews = (news) => {
-	console.log(news);
+pageNotice({ page: 1, page_size: 3, not_read: true }).then((res) => {
+	noticeList.value = res.list;
+});
+
+pageTask({ page: 1, page_size: 3, not_finish: true }).then((res) => {
+	taskList.value = res.list;
+});
+
+const handleClickBanner = (index) => {
+	nav.open(bannerList.value[index].path);
 };
 </script>
 
 <style lang="scss" scoped>
-.card {
-	margin-top: 60rpx;
-	.item {
-		margin-bottom: 30rpx;
-		.title-box {
+.card-head {
+	padding: 0 0 30rpx 0;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: space-between;
+	.title {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		.icon {
+			margin-right: 10rpx;
+		}
+		.text {
 			display: flex;
 			flex-direction: column;
-			align-items: center;
-			.title {
-				font-size: $font-md;
+			align-items: flex-start;
+			justify-content: center;
+			.text {
+				font-weight: 500;
+				display: flex;
 			}
-			.sub-title {
-				color: #909399;
-			}
-			margin-bottom: 20rpx;
-		}
-		.news-card {
-			position: relative;
-			padding: 20rpx 0rpx;
-			.title {
-				font-size: $font-normal;
-			}
-			.sub-title {
-				margin-top: 10rpx;
-				font-size: $font-sm;
-				color: #909399;
-			}
-			.image {
-				margin-top: 4rpx;
-				margin-bottom: 10rpx;
-				width: 100%;
-			}
-
-			.footer {
+			.sub-text {
 				font-size: $font-xs;
-				color: #909399;
-				.time {
-					margin-left: 30rpx;
-				}
+				color: #86909c;
 			}
 		}
 	}
+	.more {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		color: #3c9cff;
+	}
+}
+
+.notice-card {
+	position: relative;
+	top: -20rpx;
 }
 </style>

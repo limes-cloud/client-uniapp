@@ -10,7 +10,7 @@
 				</view>
 			</view>
 
-			<view class="login">
+			<view class="login form">
 				<uv-form labelPosition="left" :model="form" :rules="rules" ref="formRef" labelWidth="0">
 					<uv-form-item prop="email">
 						<uv-input
@@ -50,11 +50,11 @@
 						</uv-input>
 					</uv-form-item>
 
-					<uv-form-item v-if="scene">
+					<uv-form-item v-if="agreement">
 						<AgreementRadio
 							ref="arRef"
 							v-model="privacyPolicy"
-							:agreements="scene.agreements"
+							:agreements="agreement.contents"
 						></AgreementRadio>
 					</uv-form-item>
 					<uv-form-item>
@@ -78,25 +78,32 @@
 
 <script setup>
 import { ref, reactive, onMounted, watch } from 'vue';
-import { getLoginScene } from '@/common/api/system/scene';
-import { bindEmailCaptcha, loginEmailCaptcha, loginByEmail, bindByEmail } from '@/common/api/system/auth';
-import { setToken } from '@/library/auth';
+import { getLoginAgreement } from '@/common/api/system/agreement';
+import { oAuthBindEmail, captchaLoginEmail, captchaLogin, oAuthBindByCaptcha } from '@/common/api/system/auth';
+import { getPlatform, setToken } from '@/library/auth';
 import { useAppStore } from '@/library/store/app';
+import { useUserStore } from '@/library/store/user';
 import { nav } from '@/library/nav';
-import AgreementRadio from './agreement/agreement-radio.vue';
+import AgreementRadio from '../agreement/agreement-radio.vue';
 
 const arRef = ref(null);
-const scene = ref(null);
-const props = defineProps({ id: String });
+const agreement = ref(null);
+const props = defineProps({ bind: String });
 const toast = ref();
 const appStore = useAppStore();
 const uCode = ref();
 const uCodeSending = ref(false);
 const uCodeTips = ref('');
-const type = ref(props.id ? 'bind' : 'login');
+const type = ref(props.bind ? 'bind' : 'login');
 const privacyPolicy = ref(false);
 const formRef = ref(null);
 const captchaSecond = ref(60);
+const useUser = useUserStore();
+
+const bindInfo = {
+	code: useUser.loginCode,
+	platform: getPlatform()
+};
 
 const form = ref({
 	email: '',
@@ -120,7 +127,7 @@ const rules = ref({
 });
 
 const getAgreementList = async () => {
-	scene.value = await getLoginScene();
+	agreement.value = await getLoginAgreement();
 };
 
 getAgreementList();
@@ -138,9 +145,9 @@ const getCode = async () => {
 	if (uCode.value.canGetCode && isEmail) {
 		let data = {};
 		if (type.value == 'bind') {
-			data = await bindEmailCaptcha(form.value.email);
+			data = await oAuthBindEmail(form.value.email);
 		} else {
-			data = await loginEmailCaptcha(form.value.email);
+			data = await captchaLoginEmail(form.value.email);
 		}
 		captchaSecond.value = data.expire;
 		form.value.captcha_id = data.id;
@@ -165,9 +172,9 @@ const submit = async () => {
 	}
 	let res = {};
 	if (type.value == 'bind') {
-		res = await bindByEmail({ ...form.value });
+		res = await oAuthBindByCaptcha({ ...form.value, ...bindInfo });
 	} else {
-		res = await loginByEmail({ ...form.value });
+		res = await captchaLogin({ ...form.value });
 	}
 	setToken(res.token);
 	nav.home();

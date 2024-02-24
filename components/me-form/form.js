@@ -1,3 +1,8 @@
+import {
+	getBySha
+} from "@/common/api/system/resource";
+import formatUrl from "@/library/global/resource";
+
 const rules = {
 	require: {
 		required: true,
@@ -80,10 +85,8 @@ export const handleRules = (components) => {
 		}
 
 		if (item.config.rule && rules[item.config.rule.value]) {
-
 			const rule = uni.$uv.deepClone(rules[item.config.rule.value])
 			rule.message = item.config.label + rule.message
-			console.log(item.config.label)
 			formRule[item.field].push(rule);
 		}
 	});

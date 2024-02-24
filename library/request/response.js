@@ -32,22 +32,20 @@ export default (vm) => {
 		if (data.code === 200) {
 			return data.data || {}
 		}
-
 		if (response.statusCode === 401) {
 			// 未绑定处理
-			if (data.reason === 'UnBindError') {
-				nav.login();
+			if (data.reason === 'UnBind') {
+				nav.bind();
 				return new Promise(() => {})
 			}
 
 			// token刷新失败处理
-			if (data.reason === 'RefreshTokenError') {
+			if (data.reason === 'RefreshToken') {
 				return Promise.reject(data)
 			}
 
-			return new Promise(() => {})
 			// token认证失败处理
-			if (data.reason === 'UNAUTHORIZED' && hasToken()) {
+			if (data.reason === 'UNAUTHORIZED') {
 				if (!isRefresh) {
 					isRefresh = true;
 					return refreshToken()
@@ -59,6 +57,7 @@ export default (vm) => {
 							return uni.$uv.http.request(response.config);
 						})
 						.catch((e) => {
+							console.log("remove")
 							removeToken()
 							nav.login();
 							return new Promise(() => {})

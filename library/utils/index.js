@@ -92,7 +92,6 @@ export function downloadFile(url) {
 	// #ifdef H5
 	const platform = getPlatform()
 	if (platform == config.platform.yiban) {
-		console.log(ybDownload)
 		ybDownload(url)
 	}
 

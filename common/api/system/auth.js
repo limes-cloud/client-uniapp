@@ -1,23 +1,54 @@
 import repuest from "@/common/request.js"
+import config from "@/common/config.js"
 import {
 	rsaEncode
-} from "../../../library/utils/rsa"
+} from "@/library/utils/rsa"
 
-export const loginImageCaptcha = () => {
+export const oAuthLogin = (params) => {
 	return repuest({
-		url: "/user-center/client/v1/login/image-captcha",
+		url: "/user-center/client/v1/login/oauth",
+		method: "post",
+		params: {
+			...params,
+			app: config.name
+		}
+	})
+}
+
+export const oAuthBindByCaptcha = () => {
+	return repuest({
+		url: "/user-center/client/v1/bind/oauth/captcha",
 		method: "get"
 	})
 }
 
-export const bindImageCaptcha = () => {
+export const oAuthBindByPassword = (params) => {
+	params.password = rsaEncode({
+		password: params.password,
+		time: new Date().getTime()
+	})
 	return repuest({
-		url: "/user-center/client/v1/bind/image-captcha",
+		url: "/user-center/client/v1/bind/oauth/password",
+		method: "post",
+		params
+	})
+}
+
+export const oAuthBindImage = () => {
+	return repuest({
+		url: "/user-center/client/v1/bind/oauth/image-captcha",
 		method: "get"
 	})
 }
 
-export const loginByPassword = (params) => {
+export const oAuthBindEmail = () => {
+	return repuest({
+		url: "/user-center/client/v1/bind/oauth/email-captcha",
+		method: "get"
+	})
+}
+
+export const passwordLogin = (params) => {
 	params.password = rsaEncode({
 		password: params.password,
 		time: new Date().getTime()
@@ -29,87 +60,14 @@ export const loginByPassword = (params) => {
 	})
 }
 
-export const bindByPassword = (params) => {
+export const passwordLoginCaptcha = () => {
 	return repuest({
-		url: "/user-center/client/v1/bind/password",
-		method: "post",
-		params
-	})
-}
-
-export const loginEmailCaptcha = (email) => {
-	return repuest({
-		url: "/user-center/client/v1/login/email-captcha",
-		method: "post",
-		params: {
-			email: email
-		}
-	})
-}
-
-export const bindEmailCaptcha = (email) => {
-	return repuest({
-		url: "/user-center/client/v1/bind/email-captcha",
-		method: "post",
-		params: {
-			email: email
-		}
-	})
-}
-
-export const loginByEmail = (params) => {
-	return repuest({
-		url: "/user-center/client/v1/login/email",
-		method: "post",
-		params
-	})
-}
-
-export const bindByEmail = (params) => {
-	return repuest({
-		url: "/user-center/client/v1/bind/email",
-		method: "post",
-		params
-	})
-}
-
-
-export const refreshToken = (params) => {
-	return repuest({
-		url: "/user-center/client/v1/refresh_token",
-		method: "post",
-		params
-	})
-}
-
-export const registerImageCaptcha = () => {
-	return repuest({
-		url: "/user-center/client/v1/register/image-captcha",
+		url: "/user-center/client/v1/login/password/image-captcha",
 		method: "get"
 	})
 }
 
-export const registerEmailCaptcha = (email) => {
-	return repuest({
-		url: "/user-center/client/v1/register/email-captcha",
-		method: "post",
-		params: {
-			email
-		}
-	})
-}
-
-export const registerUsernameCheck = (username) => {
-	return repuest({
-		url: "/user-center/client/v1/register/username/check",
-		method: "get",
-		params: {
-			username
-		}
-	})
-}
-
-export const registerByPassword = (params) => {
+export const passwordRegister = (params) => {
 	params.password = rsaEncode({
 		password: params.password,
 		time: new Date().getTime()
@@ -121,9 +79,59 @@ export const registerByPassword = (params) => {
 	})
 }
 
-export const registerByEmail = (params) => {
+export const passwordRegisterCheck = (username) => {
 	return repuest({
-		url: "/user-center/client/v1/register/email",
+		url: "/user-center/client/v1/register/password/check",
+		method: "get",
+		params: {
+			username
+		}
+	})
+}
+
+export const passwordRegisterCaptcha = () => {
+	return repuest({
+		url: "/user-center/client/v1/register/password/image-captcha",
+		method: "get"
+	})
+}
+
+
+export const captchaLogin = (params) => {
+	return repuest({
+		url: "/user-center/client/v1/login/captcha",
+		method: "post",
+		params
+	})
+}
+
+export const captchaLoginEmail = (email) => {
+	return repuest({
+		url: "/user-center/client/v1/login/captcha/email-captcha?email=" + email,
+		method: "get"
+	})
+}
+
+export const captchaRegister = (params) => {
+	return repuest({
+		url: "/user-center/client/v1/register/captcha",
+		method: "post",
+		params
+	})
+}
+
+
+export const captchaRegisterEmail = (email) => {
+	return repuest({
+		url: "/user-center/client/v1/register/captcha/email-captcha?email=" + email,
+		method: "get"
+	})
+}
+
+
+export const refreshToken = (params) => {
+	return repuest({
+		url: "/user-center/client/v1/token/refresh",
 		method: "post",
 		params
 	})

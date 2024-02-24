@@ -9,11 +9,17 @@ import {
 export const useUserStore = defineStore('user', {
 	state: () => {
 		return {
+			id: 0,
 			loginCode: "",
-			name: "",
-			nickname: "",
+			real_name: "",
+			nick_name: "",
+			username: "",
 			phone: "",
-			email: ""
+			email: "",
+			avatar: "",
+			gender: "",
+			extra: {},
+			resource: null
 		};
 	},
 	getters: {

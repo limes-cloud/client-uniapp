@@ -24,7 +24,7 @@ function request(info) {
 	}
 
 	if (method === "delete") { //拼接url 防止delete找不到参数
-		return uni.$uv.http.delete(url, {
+		return uni.$uv.http.delete(url, null, {
 			params: params,
 			header: header
 		})

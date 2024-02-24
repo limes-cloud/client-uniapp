@@ -23,7 +23,7 @@
 									thumb-size="lg"
 									show-arrow
 									link
-									:to="'/pages/login/register/' + item.platform"
+									:to="item.platform"
 									:customStyle="{ backgroundColor: '#f4f5f9' }"
 								></uv-list-item>
 							</template>
@@ -41,17 +41,17 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import { getLoginScene } from '@/common/api/system/scene';
+import { getLoginAgreement } from '@/common/api/system/agreement';
 import { useAppStore } from '@/library/store/app';
 
 const toast = ref();
 const appStore = useAppStore();
 
-const scene = ref(null);
+const agreement = ref(null);
 const loading = ref(true);
 
 onMounted(async () => {
-	scene.value = await getLoginScene();
+	agreement.value = await getLoginAgreement();
 	loading.value = false;
 });
 </script>

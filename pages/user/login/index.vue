@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uv-navbar placeholder leftIcon title="用户登录"></uv-navbar>
+		<uv-navbar placeholder leftIcon="" :title="'用户' + typeText"></uv-navbar>
 		<view class="content">
 			<view class="header">
 				<view class="logo">
@@ -12,7 +12,7 @@
 				</view>
 
 				<view class="app">
-					<view class="title">登录 {{ useApp.name }}</view>
+					<view class="title">{{ typeText }} {{ useApp.name }}</view>
 					<view class="desc">
 						{{ useApp.description }}
 					</view>
@@ -23,7 +23,7 @@
 							<uv-list-item
 								@click="handleLogin"
 								clickable
-								:title="suggestLoggin.name + '登录'"
+								:title="suggestLoggin.name + typeText"
 								:thumb="$rurl(suggestLoggin.logo)"
 								thumb-size="lg"
 								show-arrow
@@ -34,12 +34,12 @@
 						<template v-for="(item, index) in useApp.channels" :key="index">
 							<template v-if="['password', 'captcha'].includes(item.platform)">
 								<uv-list-item
-									:title="item.name + '登录'"
+									:title="item.name + typeText"
 									:thumb="$rurl(item.logo)"
 									thumb-size="lg"
 									show-arrow
 									link
-									:to="'/pages/login/' + item.platform"
+									:to="item.platform + (type == 'bind' ? '?bind=true' : '')"
 									:customStyle="{ backgroundColor: '#f4f5f9' }"
 								></uv-list-item>
 							</template>
@@ -50,11 +50,11 @@
 					<AgreementRadio
 						v-if="!loading"
 						v-model="privacyPolicy"
-						:agreements="scene.agreements"
+						:agreements="agreement.contents"
 					></AgreementRadio>
 				</view>
-				<view v-if="useApp.channels.length - 2 > 0 && loginInfo.platform == 'h5'">
-					<uv-divider text="其他登录方式"></uv-divider>
+				<!-- <view v-if="useApp.channels.length - 2 > 0 && loginInfo.platform == 'h5'">
+					<uv-divider text="其他方式"></uv-divider>
 					<uv-grid :border="false" :col="useApp.channels.length - 2">
 						<template v-for="(item, index) in useApp.channels" :key="index">
 							<uv-grid-item v-if="!['password', 'captcha'].includes(item.platform)">
@@ -71,6 +71,7 @@
 						</template>
 					</uv-grid>
 				</view>
+			 -->
 			</view>
 
 			<uv-loading-page :loading="loading" loading-mode="semicircle"></uv-loading-page>
@@ -82,13 +83,17 @@
 
 <script setup>
 import { ref, reactive, onMounted, watch } from 'vue';
-import { getLoginScene } from '@/common/api/system/scene';
+import { getLoginAgreement } from '@/common/api/system/agreement';
+import { oAuthLogin } from '@/common/api/system/auth';
 import { getPlatform, setToken } from '@/library/auth';
 import { useAppStore } from '@/library/store/app';
 import { useUserStore } from '@/library/store/user';
 import { nav } from '@/library/nav';
-import AgreementRadio from './agreement/agreement-radio.vue';
+import AgreementRadio from '../agreement/agreement-radio.vue';
 
+const props = defineProps({ bind: String });
+const type = ref(props.bind ? 'bind' : 'login');
+const typeText = type.value == 'bind' ? '绑定' : '登录';
 const toast = ref();
 const useApp = useAppStore();
 const useUser = useUserStore();
@@ -97,7 +102,8 @@ const loginInfo = {
 	code: useUser.loginCode,
 	platform: getPlatform()
 };
-const scene = ref(null);
+
+const agreement = ref(null);
 const loading = ref(true);
 const suggestLoggin = ref({});
 const privacyPolicy = ref(false);
@@ -118,26 +124,28 @@ const handleLogin = async () => {
 		return;
 	}
 
-	const data = await login({ ...loginInfo });
+	const data = await oAuthLogin({ ...loginInfo });
 	setToken(data.token);
 	nav.home();
-	uni.switchTab({ url: '/pages/index/index' });
 };
 
 const register = () => {
-	uni.navigateTo({
-		url: '/pages/login/register/index'
-	});
+	nav.register();
 };
 
 //自动登录回调，自动登录
 onMounted(async () => {
+	agreement.value = await getLoginAgreement();
+	loading.value = false;
+
+	if (type.value == 'bind') {
+		loading.value = false;
+		return;
+	}
 	handleSuggestLoggin();
-	if (loginInfo.code) {
+	if (loginInfo.code && suggestLoggin.value) {
 		handleLogin();
 	}
-	scene.value = await getLoginScene();
-	loading.value = false;
 });
 </script>
 

@@ -1,21 +1,21 @@
 <template>
 	<view>
-		<uv-navbar placeholder title="密码注册" auto-back></uv-navbar>
+		<uv-navbar placeholder title="密码登录" auto-back></uv-navbar>
 		<view class="content">
 			<view class="app">
-				<view class="title">注册 {{ appStore.name }}</view>
+				<view class="title">{{ type == 'bind' ? '绑定' : '登录' }} {{ appStore.name }}</view>
 				<view class="desc">
 					{{ appStore.description }}
 				</view>
 			</view>
 
-			<view class="login">
+			<view class="login form">
 				<uv-form :model="form" :rules="rules" ref="formRef" labelWidth="0">
 					<uv-form-item prop="username">
 						<uv-input
 							v-model="form.username"
 							prefixIcon="account"
-							placeholder="请输入账号"
+							placeholder="请输入账号/邮箱/手机"
 							:customStyle="{ padding: '16rpx 10rpx' }"
 							:prefixIconStyle="{ fontSize: '38rpx' }"
 							clearable
@@ -27,17 +27,6 @@
 							password
 							prefixIcon="lock"
 							placeholder="请输入密码"
-							:customStyle="{ padding: '16rpx 10rpx' }"
-							:prefixIconStyle="{ fontSize: '38rpx' }"
-							clearable
-						></uv-input>
-					</uv-form-item>
-					<uv-form-item prop="ackPassword">
-						<uv-input
-							v-model="form.ackPassword"
-							password
-							prefixIcon="lock"
-							placeholder="请重复密码"
 							:customStyle="{ padding: '16rpx 10rpx' }"
 							:prefixIconStyle="{ fontSize: '38rpx' }"
 							clearable
@@ -62,26 +51,25 @@
 							</view>
 						</view>
 					</uv-form-item>
-					<uv-form-item v-if="scene">
+					<uv-form-item v-if="agreement">
 						<AgreementRadio
 							ref="arRef"
 							v-model="privacyPolicy"
-							:agreements="scene.agreements"
+							:agreements="agreement.contents"
 						></AgreementRadio>
 					</uv-form-item>
 					<uv-form-item>
 						<view class="submit">
-							<uv-button type="primary" text="注册" @click="submit"></uv-button>
+							<uv-button type="primary" text="登录" @click="submit"></uv-button>
 						</view>
 					</uv-form-item>
 					<uv-form-item>
 						<view class="submit">
-							<uv-button type="primary" :plain="true" @click="back" text="更换注册方式"></uv-button>
+							<uv-button type="primary" :plain="true" @click="back" text="更换登录方式"></uv-button>
 						</view>
 					</uv-form-item>
 				</uv-form>
 			</view>
-
 			<uv-toast ref="toast"></uv-toast>
 			<uv-no-network></uv-no-network>
 		</view>
@@ -90,22 +78,31 @@
 
 <script setup>
 import { ref, reactive, onMounted, watch, onUnmounted } from 'vue';
-import { registerByPassword, registerImageCaptcha, registerUsernameCheck } from '@/common/api/system/auth';
-import { getRegisterScene } from '@/common/api/system/scene';
+import { passwordLogin, oAuthBindByPassword, passwordLoginCaptcha, oAuthBindImage } from '@/common/api/system/auth';
+import { getLoginAgreement } from '@/common/api/system/agreement';
+import { getPlatform, setToken } from '@/library/auth';
 import { useAppStore } from '@/library/store/app';
 import { useUserStore } from '@/library/store/user';
-import { setToken } from '@/library/auth';
 import { nav } from '@/library/nav';
 import AgreementRadio from '../agreement/agreement-radio.vue';
 
+const arRef = ref(null);
 const formRef = ref(null);
-const scene = ref(null);
+const agreement = ref(null);
+const props = defineProps({ bind: String });
 const toast = ref();
 const appStore = useAppStore();
 const privacyPolicy = ref(false);
+const type = ref(props.bind ? 'bind' : 'login');
 const captchaBase64 = ref('');
 const timeInter = ref(null);
-const arRef = ref(null);
+
+const useUser = useUserStore();
+
+const bindInfo = {
+	code: useUser.loginCode,
+	platform: getPlatform()
+};
 
 const form = ref({
 	username: '',
@@ -115,70 +112,28 @@ const form = ref({
 	app: appStore.keyword
 });
 const rules = ref({
-	username: [
-		{
-			pattern: /^[_a-zA-Z][_a-zA-Z0-9]+$/g,
-			transform(value) {
-				return String(value);
-			},
-			message: '账号格式不正确',
-			trigger: ['blur', 'change']
-		},
-		{
-			type: 'string',
-			required: true,
-			message: '请输入账号',
-			trigger: ['blur', 'change']
-		},
-		{
-			min: 6,
-			max: 32,
-			message: '账户长度在6-20个字符之间',
-			trigger: ['blur', 'change']
-		},
-		{
-			asyncValidator: (rule, value, callback) => {
-				if (value.length < 6) {
-					callback();
-					return;
-				}
-				registerUsernameCheck(value).then((res) => {
-					if (res.allow) {
-						callback();
-					} else {
-						callback('账号已存在');
-					}
-				});
-			},
-			trigger: ['blur', 'change']
-		}
-	],
-	password: [
-		{
-			type: 'string',
-			required: true,
-			message: '请输入密码',
-			trigger: ['blur', 'change']
-		},
-		{
-			min: 8,
-			max: 32,
-			message: '密码长度在8-20个字符之间',
-			trigger: ['blur', 'change']
-		}
-	],
-	ackPassword: {
-		validator: (rule, value, callback) => {
-			if (!form.value.password) return true;
-			return value === form.value.password;
-		},
-		message: '两次密码不一致',
+	username: {
+		type: 'string',
+		required: true,
+		message: '请输入账号/邮箱/手机',
+		trigger: ['blur', 'change']
+	},
+	password: {
+		type: 'string',
+		required: true,
+		message: '请输入密码',
+		trigger: ['blur', 'change']
+	},
+	captcha: {
+		type: 'string',
+		required: true,
+		message: '请输入验证码',
 		trigger: ['blur', 'change']
 	}
 });
 
 const getAgreementList = async () => {
-	scene.value = await getRegisterScene();
+	agreement.value = await getLoginAgreement();
 };
 
 getAgreementList();
@@ -194,7 +149,14 @@ const submit = async () => {
 		return;
 	}
 	await formRef.value.validate();
-	registerByPassword({ ...form.value })
+
+	var request = null;
+	if (type.value == 'bind') {
+		request = oAuthBindByPassword({ ...form.value, ...bindInfo });
+	} else {
+		request = passwordLogin({ ...form.value });
+	}
+	request
 		.then((res) => {
 			setToken(res.token);
 			nav.home();
@@ -204,17 +166,16 @@ const submit = async () => {
 		});
 };
 
-const login = () => {
-	uni.redirectTo({
-		url: '/pages/login/index'
-	});
-};
-
 const fetchCaptcha = async () => {
 	// 清除定时器
 	clearInterval(timeInter.value);
 	// 请求验证码
-	let data = await registerImageCaptcha();
+	let data = {};
+	if (type.value == 'bind') {
+		data = await oAuthBindImage();
+	} else {
+		data = await passwordLoginCaptcha();
+	}
 	form.value.captcha_id = data.id;
 	captchaBase64.value = data.base64;
 	// 定时刷新

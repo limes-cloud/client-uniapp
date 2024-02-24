@@ -10,6 +10,7 @@ export const useAppStore = defineStore('app', {
 			logo: "",
 			keyword: "",
 			channels: [],
+			fields: [],
 			description: "",
 			resource: {
 				src: "",

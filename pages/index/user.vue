@@ -1,7 +1,13 @@
 <template>
 	<view>
 		<uv-no-network></uv-no-network>
-		<uv-navbar placeholder bgColor="#3792f9" leftIcon title="个人中心" :titleStyle="{ color: '#fff' }"></uv-navbar>
+		<uv-navbar
+			placeholder
+			bgColor="#3792f9"
+			leftIcon=""
+			title="个人中心"
+			:titleStyle="{ color: '#fff' }"
+		></uv-navbar>
 		<view class="header">
 			<uv-avatar :size="80" :src="logo"></uv-avatar>
 			<text class="username">{{ useUser.name }}</text>

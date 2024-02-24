@@ -7,3 +7,11 @@ export const currentUser = (params) => {
 		params
 	})
 }
+
+export const updateCurrentUser = (params) => {
+	return repuest({
+		url: "/user-center/client/v1/user",
+		method: "put",
+		params
+	})
+}

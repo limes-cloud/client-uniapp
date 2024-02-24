@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<uv-no-network></uv-no-network>
-		<uv-navbar border placeholder leftIcon title="党务资料"></uv-navbar>
+		<uv-navbar border placeholder auto-back title="党务资料"></uv-navbar>
 
 		<uv-sticky bgColor="#ffffff" offsetTop="1">
 			<uv-tabs :list="tabList" @click="handleSwitchTab"></uv-tabs>
@@ -15,12 +15,18 @@
 						<view class="sub-title uv-line-1">{{ ite.desc }}</view>
 					</view>
 					<view class="button">
-						<uv-button :hairline="false" type="primary" @click="handleDownload($rurl(ite.resource.src))" :plain="true" text="下载" size="small"></uv-button>
+						<uv-button
+							:hairline="false"
+							type="primary"
+							@click="handleDownload($rurl(ite.resource.src))"
+							:plain="true"
+							text="下载"
+							size="small"
+						></uv-button>
 					</view>
 				</view>
 			</template>
-
-			<me-tip v-if="!resourceList.length" type="empty" title="暂无校园新闻" size="small"></me-tip>
+			<uv-empty v-if="!resourceList.length" mode="data" style="margin-top: 200rpx"></uv-empty>
 			<uv-load-more v-else line :status="loadStatus" />
 		</view>
 	</view>
@@ -46,8 +52,8 @@ const params = ref({ page: 1, page_size: 10, classify_id: 0 });
 const resourceList = ref([]);
 const loadStatus = ref('loading');
 
-allResourceClassify().then((list) => {
-	tabList.value = tabList.value.concat(list);
+allResourceClassify().then((res) => {
+	tabList.value = tabList.value.concat(res.list);
 });
 
 const fetchData = () => {
@@ -59,7 +65,7 @@ const fetchData = () => {
 fetchData();
 
 const handleSwitchTab = (item) => {
-	newsList.value = [];
+	resourceList.value = [];
 	params.value = {
 		page: 1,
 		page_size: 10,
