@@ -15,7 +15,19 @@
 		<view class="cover" v-if="!isPlay" @click="handleClickVideo">
 			<uv-icon name="play-circle" color="#ffffff" size="36"></uv-icon>
 		</view>
+		<view class="full" v-if="isPlay" @click.stop="handleFullcreen">
+			<uv-icon name="full-screen" custom-prefix="custom-icon" size="20" color="#fff"></uv-icon>
+		</view>
 	</view>
+	<view class="info" v-if="current">
+		<view class="title">
+			{{ current.classify.name }}
+		</view>
+		<view class="desc">
+			{{ current.classify.desc }}
+		</view>
+	</view>
+	<uv-gap height="10" bgColor="#f2f2f2"></uv-gap>
 	<view class="list">
 		<uv-cell-group>
 			<template v-for="(item, index) in videoList" :key="index">
@@ -101,6 +113,12 @@ const handlePlay = (item) => {
 	}
 };
 
+const handleFullcreen = () => {
+	if (isPlay.value) {
+		ctx.value.requestFullScreen();
+	}
+};
+
 const handleClickVideo = () => {
 	isPlay.value ? pauseVideo() : playVideo();
 };
@@ -143,6 +161,14 @@ const handleEnd = () => {};
 </script>
 
 <style lang="scss" scoped>
+.info {
+	padding: 20rpx 30rpx;
+	.title {
+		margin-bottom: 20rpx;
+		font-weight: 700;
+	}
+}
+
 .header {
 	width: 100%;
 	position: relative;
@@ -150,6 +176,13 @@ const handleEnd = () => {};
 		width: 100%;
 		height: 420rpx;
 		object-fit: fill;
+	}
+
+	.full {
+		position: absolute;
+		right: 7px;
+		bottom: 5px;
+		padding: 10rpx;
 	}
 	.cover {
 		position: absolute;

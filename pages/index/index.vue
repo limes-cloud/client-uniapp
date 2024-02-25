@@ -48,7 +48,7 @@
 						<text class="sub-text">Todo Task</text>
 					</view>
 				</view>
-				<view class="more">
+				<view class="more" @click="nav.task()">
 					<text class="text">更多</text>
 					<uv-icon color="#3c9cff" name="arrow-right"></uv-icon>
 				</view>
@@ -58,7 +58,7 @@
 				<TaskCard :list="taskList"></TaskCard>
 			</view>
 		</view>
-		<uv-gap height="10" bgColor="#f2f2f2"></uv-gap>
+		<!-- <uv-gap height="10" bgColor="#f2f2f2"></uv-gap>
 		<view class="content">
 			<view class="card-head">
 				<view class="title">
@@ -75,7 +75,7 @@
 					<uv-icon color="#3c9cff" name="arrow-right"></uv-icon>
 				</view>
 			</view>
-		</view>
+		</view> -->
 		<uv-gap height="10" bgColor="#f2f2f2"></uv-gap>
 		<view class="content">
 			<view class="card-head">

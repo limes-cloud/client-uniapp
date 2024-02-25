@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<uv-no-network></uv-no-network>
-		<uv-navbar placeholder bgColor="#d81e06" leftIcon="" title="个人中心" :titleStyle="{ color: '#fff' }">
+		<uv-navbar placeholder bgColor="#3c9cff" leftIcon="" title="个人中心" :titleStyle="{ color: '#fff' }">
 			<template v-slot:right>
 				<view class="right">
 					<uv-icon
@@ -55,7 +55,7 @@ const edit = () => {
 	justify-content: center;
 	height: 360rpx;
 	overflow: hidden;
-	background: #d81e06;
+	background: #3c9cff;
 	background-size: cover;
 	.username {
 		margin-top: 30rpx;

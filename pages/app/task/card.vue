@@ -52,7 +52,8 @@ const open = (item) => {
 	border-radius: 8rpx;
 	margin-bottom: 30rpx;
 	background-color: #ffffff;
-	box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+	border: 1px solid #f2f2f2;
+	// box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
 	.title {
 		margin-bottom: 10rpx;
 		font-weight: 600;

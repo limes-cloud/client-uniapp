@@ -85,7 +85,7 @@
 import { ref, reactive, onMounted, watch } from 'vue';
 import { getLoginAgreement } from '@/common/api/system/agreement';
 import { oAuthLogin } from '@/common/api/system/auth';
-import { getPlatform, setToken } from '@/library/auth';
+import { getPlatform, setToken, getCode } from '@/library/auth';
 import { useAppStore } from '@/library/store/app';
 import { useUserStore } from '@/library/store/user';
 import { nav } from '@/library/nav';
@@ -122,6 +122,9 @@ const handleLogin = async () => {
 	if (!loginInfo) {
 		nav.error('授权信息错误，请退出重新登录！');
 		return;
+	}
+	if (!loginInfo.code) {
+		loginInfo.code = await getCode();
 	}
 
 	const data = await oAuthLogin({ ...loginInfo });

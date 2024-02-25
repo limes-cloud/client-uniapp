@@ -73,4 +73,7 @@ page {
 .content {
 	// padding-top: 0px;
 }
+page {
+	background: #f2f2f2;
+}
 </style>

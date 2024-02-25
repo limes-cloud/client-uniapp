@@ -65,9 +65,10 @@ defineProps({
 	margin-bottom: 0px !important;
 }
 .notice-card {
+	background-color: #ffffff;
 	position: relative;
 	margin-bottom: 30rpx;
-	border: 1px solid #f7f7f7;
+	border: 1px solid #f2f2f2;
 	// box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
 	border-radius: 8rpx;
 	padding: 20rpx 30rpx;

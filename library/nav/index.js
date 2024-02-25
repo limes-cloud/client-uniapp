@@ -1,3 +1,8 @@
+import {
+	ref
+} from "vue"
+const isRedirectToLogin = ref(false);
+
 export const nav = {
 	home: () => {
 		uni.switchTab({
@@ -5,9 +10,16 @@ export const nav = {
 		});
 	},
 	login: () => {
-		uni.redirectTo({
-			url: "/pages/user/login/index"
-		})
+		if (!isRedirectToLogin.value) {
+			isRedirectToLogin.value = true
+			uni.redirectTo({
+				url: "/pages/user/login/index"
+			})
+			setTimeout(() => {
+				isRedirectToLogin.value = false
+			}, 500)
+		}
+
 	},
 	bind: () => {
 		uni.redirectTo({
@@ -18,6 +30,7 @@ export const nav = {
 		uni.navigateTo({
 			url: '/pages/user/register/index'
 		});
+
 	},
 	error: (text) => {
 		uni.redirectTo({

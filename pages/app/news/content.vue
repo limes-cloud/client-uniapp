@@ -53,14 +53,14 @@
 				@longpress="showDeleteComment(comment)"
 			>
 				<view v-if="!comment.reply">
-					<text class="name" @click="showUserinfo(comment.from.id)">{{ comment.from.nick_name }}</text>
+					<text class="name" @click="showUserinfo(comment.from.id)">{{ username(comment.from) }}</text>
 					:
 					<text @click.stop="replay(comment.from)">{{ comment.text }}</text>
 				</view>
 				<view v-else>
-					<text class="name" @click="showUserinfo(comment.from.id)">{{ comment.from.nick_name }}</text>
+					<text class="name" @click="showUserinfo(comment.from.id)">{{ username(comment.from) }}</text>
 					<text class="reply-text">回复</text>
-					<text class="name" @click="showUserinfo(comment.reply.id)">{{ comment.reply.nick_name }}</text>
+					<text class="name" @click="showUserinfo(comment.reply.id)">{{ username(comment.reply) }}</text>
 					:
 					<text @click.stop="replay(comment.from)">{{ comment.text }}</text>
 				</view>
@@ -156,6 +156,13 @@ const comment = async () => {
 	placeText.value = '说点什么吧';
 	replyUser.value = {};
 	toast.value.success('发布成功');
+};
+
+const username = (info) => {
+	if (info) {
+		return info.nick_name;
+	}
+	return '已注销用户';
 };
 
 const deleteComment = async () => {

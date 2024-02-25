@@ -131,7 +131,7 @@ export const captchaRegisterEmail = (email) => {
 
 export const refreshToken = (params) => {
 	return repuest({
-		url: "/user-center/client/v1/token/refresh",
+		url: "/user-center/client/token/refresh",
 		method: "post",
 		params
 	})

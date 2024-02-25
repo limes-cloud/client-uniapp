@@ -8,6 +8,7 @@ import {
 } from "@/common/api/system/auth"
 
 import {
+	getToken,
 	hasToken,
 	removeToken,
 	setToken
@@ -31,6 +32,11 @@ export default (vm) => {
 		const data = response.data
 		if (data.code === 200) {
 			return data.data || {}
+		}
+
+		if (response.statusCode === 401 && getToken() == "") {
+			nav.login();
+			return
 		}
 		if (response.statusCode === 401) {
 			// 未绑定处理
