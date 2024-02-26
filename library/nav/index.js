@@ -21,6 +21,11 @@ export const nav = {
 		}
 
 	},
+	readAgreement(id) {
+		uni.navigateTo({
+			url: '/pages/user/agreement/index?id=' + id
+		});
+	},
 	bind: () => {
 		uni.redirectTo({
 			url: "/pages/user/login/index?bind=true"

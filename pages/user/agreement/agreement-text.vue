@@ -20,6 +20,7 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { nav } from '@/library/nav';
 const props = defineProps({
 	agreements: {
 		type: Array,
@@ -30,9 +31,7 @@ const props = defineProps({
 });
 
 const readAgreement = (id) => {
-	uni.navigateTo({
-		url: '/pages/login/agreement/index?id=' + id
-	});
+	nav.readAgreement(id);
 };
 </script>
 

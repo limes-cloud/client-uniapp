@@ -4,7 +4,7 @@ import config from "@/common/config.js"
 
 export const getAgreementContent = (id) => {
 	return repuest({
-		url: "/user-center/client/v1/agreement?id=" + id,
+		url: "/user-center/client/v1/agreement/content?id=" + id,
 		method: "get"
 	})
 }
