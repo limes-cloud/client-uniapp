@@ -12,13 +12,13 @@
 
 <script setup>
 import { ref } from 'vue';
-import { getAgreement } from '@/common/api/system/agreement';
+import { getAgreementContent } from '@/common/api/system/agreement';
 
 const params = defineProps({ id: String });
 const title = ref('协议内容');
 const content = ref('');
 
-getAgreement(params.id).then((res) => {
+getAgreementContent(params.id).then((res) => {
 	title.value = res.name;
 	content.value = res.content;
 });

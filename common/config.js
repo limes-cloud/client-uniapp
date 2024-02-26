@@ -1,6 +1,6 @@
 export default {
 	name: "party-affairs",
-	server: "UserCenter",
+	server: "PartyAffairs",
 	baseUrl: process.env.BASE_URL,
 	platform: {
 		yb: "yb",

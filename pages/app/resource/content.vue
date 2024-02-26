@@ -20,13 +20,13 @@
 
 <script setup>
 import { ref } from 'vue';
-import { getNews } from '@/common/api/news.js';
+import { getNewsContent } from '@/common/api/news.js';
 
 const params = defineProps({ id: Number });
 const title = ref('文章详情');
 const data = ref();
 
-getNews(params).then((res) => {
+getNewsContent(params).then((res) => {
 	data.value = res;
 });
 </script>
