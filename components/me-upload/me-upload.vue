@@ -55,15 +55,15 @@ const uploadFile = async (event) => {
 	});
 };
 
-const binaryToBase64 = (buffer) => {
-	let binary = '';
-	const bytes = new Uint8Array(buffer);
-	const len = bytes.byteLength;
-	for (let i = 0; i < len; i += 1) {
-		binary += String.fromCharCode(bytes[i]);
-	}
-	return crypto.base64().btoa(binary);
-};
+// const binaryToBase64 = (buffer) => {
+// 	let binary = '';
+// 	const bytes = new Uint8Array(buffer);
+// 	const len = bytes.byteLength;
+// 	for (let i = 0; i < len; i += 1) {
+// 		binary += String.fromCharCode(bytes[i]);
+// 	}
+// 	return crypto.base64().btoa(binary);
+// };
 
 const binaryToSha = (binary) => {
 	return crypto.sha256(binary);
@@ -137,14 +137,9 @@ const uploadFactory = async (file) => {
 	const size = data.chunk_size;
 	const uploaed = data.upload_chunks;
 	const taskArr = [];
+
 	if (count <= 1) {
-		taskArr.push(
-			upload({
-				data: binaryToBase64(binary),
-				upload_id: data.upload_id,
-				index: 1
-			})
-		);
+		taskArr.push(upload(new Blob([binary]), { upload_id: data.upload_id, index: 1 }));
 	} else {
 		for (let i = 0; i < count; i += 1) {
 			if (uploaed.includes(i + 1)) continue;
@@ -154,13 +149,7 @@ const uploadFactory = async (file) => {
 			} else {
 				sliceBinary = binary.slice(i * size, (i + 1) * size);
 			}
-			taskArr.push(
-				upload({
-					data: binaryToBase64(sliceBinary),
-					upload_id: data.upload_id,
-					index: i + 1
-				})
-			);
+			taskArr.push(upload(new Blob([sliceBinary]), { upload_id: data.upload_id, index: i + 1 }));
 		}
 	}
 	taskArr.forEach((fn, index) => {
@@ -169,7 +158,6 @@ const uploadFactory = async (file) => {
 				onSuccess(file, res);
 			}
 		}).catch((res) => {
-			console.log('上传失败', res);
 			onFailed(file);
 		});
 	});

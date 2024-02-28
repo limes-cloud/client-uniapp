@@ -9,11 +9,15 @@ export const prepareUpload = (params) => {
 	})
 }
 
-export const upload = (params) => {
+export const upload = (binary, params) => {
 	return repuest({
 		url: "/resource/client/v1/upload",
-		method: "post",
-		params
+		method: "upload",
+		binary,
+		params,
+		header: {
+			'Content-Type': 'multipart/form-data'
+		}
 	})
 }
 

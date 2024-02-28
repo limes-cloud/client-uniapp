@@ -3,6 +3,7 @@ function request(info) {
 	var method = info.method;
 	var params = info.params ? filterParam(info.params) : {};
 	var header = info.header || {};
+	var file = info.file;
 
 	if (method === "get") {
 		return uni.$uv.http.get(url, {
@@ -27,6 +28,16 @@ function request(info) {
 		return uni.$uv.http.delete(url, null, {
 			params: params,
 			header: header
+		})
+	}
+
+	if (method === "upload") {
+		return uni.$uv.http.upload(url, {
+			file: file,
+			name: 'data',
+			timeout: 60000,
+			header: header,
+			formData: params
 		})
 	}
 }
