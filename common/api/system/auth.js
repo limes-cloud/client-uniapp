@@ -15,10 +15,11 @@ export const oAuthLogin = (params) => {
 	})
 }
 
-export const oAuthBindByCaptcha = () => {
+export const oAuthBindByCaptcha = (params) => {
 	return repuest({
 		url: "/user-center/client/v1/bind/oauth/captcha",
-		method: "get"
+		method: "post",
+		params
 	})
 }
 
@@ -41,10 +42,13 @@ export const oAuthBindImage = () => {
 	})
 }
 
-export const oAuthBindEmail = () => {
+export const oAuthBindEmail = (email) => {
 	return repuest({
 		url: "/user-center/client/v1/bind/oauth/email-captcha",
-		method: "get"
+		method: "post",
+		params: {
+			email: email
+		}
 	})
 }
 
@@ -107,8 +111,11 @@ export const captchaLogin = (params) => {
 
 export const captchaLoginEmail = (email) => {
 	return repuest({
-		url: "/user-center/client/v1/login/captcha/email-captcha?email=" + email,
-		method: "get"
+		url: "/user-center/client/v1/login/captcha/email",
+		method: "post",
+		params: {
+			email: email
+		}
 	})
 }
 

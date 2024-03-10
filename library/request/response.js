@@ -34,9 +34,9 @@ export default (vm) => {
 			return data.data || {}
 		}
 
-		if (response.statusCode === 401 && getToken() == "") {
+		if (response.statusCode === 401 && data.reason !== 'UnBind' && getToken() == "") {
 			nav.login();
-			return
+			return new Promise(() => {})
 		}
 		if (response.statusCode === 401) {
 			// 未绑定处理
@@ -63,7 +63,6 @@ export default (vm) => {
 							return uni.$uv.http.request(response.config);
 						})
 						.catch((e) => {
-							console.log("remove")
 							removeToken()
 							nav.login();
 							return new Promise(() => {})

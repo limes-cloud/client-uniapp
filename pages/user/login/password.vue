@@ -1,9 +1,9 @@
 <template>
 	<view>
-		<uv-navbar placeholder title="密码登录" auto-back></uv-navbar>
+		<uv-navbar placeholder :title="'密码登录' + typeText" auto-back></uv-navbar>
 		<view class="content">
 			<view class="app">
-				<view class="title">{{ type == 'bind' ? '绑定' : '登录' }} {{ appStore.name }}</view>
+				<view class="title">{{ typeText }} {{ appStore.name }}</view>
 				<view class="desc">
 					{{ appStore.description }}
 				</view>
@@ -60,12 +60,17 @@
 					</uv-form-item>
 					<uv-form-item>
 						<view class="submit">
-							<uv-button type="primary" text="登录" @click="submit"></uv-button>
+							<uv-button type="primary" :text="typeText" @click="submit"></uv-button>
 						</view>
 					</uv-form-item>
 					<uv-form-item>
 						<view class="submit">
-							<uv-button type="primary" :plain="true" @click="back" text="更换登录方式"></uv-button>
+							<uv-button
+								type="primary"
+								:plain="true"
+								@click="back"
+								:text="'更换' + typeText + '方式'"
+							></uv-button>
 						</view>
 					</uv-form-item>
 				</uv-form>
@@ -94,6 +99,7 @@ const toast = ref();
 const appStore = useAppStore();
 const privacyPolicy = ref(false);
 const type = ref(props.bind ? 'bind' : 'login');
+const typeText = type.value == 'bind' ? '绑定' : '登录';
 const captchaBase64 = ref('');
 const timeInter = ref(null);
 

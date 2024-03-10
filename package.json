@@ -22,7 +22,7 @@
 				"browser": "chrome",
 				"env": {
 					"UNI_PLATFORM": "h5",
-					"BASE_URL": "http://gw.qlime.cn"
+					"BASE_URL": "https://prod-gw.qlime.cn"
 				}
 			},
 			"wx-dev": {

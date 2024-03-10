@@ -46,13 +46,13 @@
 						</template>
 					</uv-list>
 				</view>
-				<view class="privacy-policy">
+				<!-- <view class="privacy-policy">
 					<AgreementRadio
 						v-if="!loading"
 						v-model="privacyPolicy"
 						:agreements="agreement.contents"
 					></AgreementRadio>
-				</view>
+				</view> -->
 				<!-- <view v-if="useApp.channels.length - 2 > 0 && loginInfo.platform == 'h5'">
 					<uv-divider text="其他方式"></uv-divider>
 					<uv-grid :border="false" :col="useApp.channels.length - 2">
@@ -127,9 +127,11 @@ const handleLogin = async () => {
 		loginInfo.code = await getCode();
 	}
 
-	const data = await oAuthLogin({ ...loginInfo });
-	setToken(data.token);
-	nav.home();
+	if (loginInfo.code) {
+		const data = await oAuthLogin({ ...loginInfo });
+		setToken(data.token);
+		nav.home();
+	}
 };
 
 const register = () => {

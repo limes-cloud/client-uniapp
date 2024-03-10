@@ -1,10 +1,10 @@
 <template>
 	<view>
-		<uv-navbar placeholder title="验证码登录" auto-back></uv-navbar>
+		<uv-navbar placeholder :title="'验证码' + typeText" auto-back></uv-navbar>
 
 		<view class="content">
 			<view class="app">
-				<view class="title">{{ type == 'bind' ? '绑定' : '登录' }} {{ appStore.name }}</view>
+				<view class="title">{{ typeText }} {{ appStore.name }}</view>
 				<view class="desc">
 					{{ appStore.description }}
 				</view>
@@ -59,12 +59,17 @@
 					</uv-form-item>
 					<uv-form-item>
 						<view class="submit">
-							<uv-button :throttleTime="500" type="primary" text="登录" @click="submit"></uv-button>
+							<uv-button :throttleTime="500" type="primary" :text="typeText" @click="submit"></uv-button>
 						</view>
 					</uv-form-item>
 					<uv-form-item>
 						<view class="submit">
-							<uv-button type="primary" :plain="true" @click="back" text="更换登录方式"></uv-button>
+							<uv-button
+								type="primary"
+								:plain="true"
+								@click="back"
+								:text="'更换' + typeText + '方式'"
+							></uv-button>
 						</view>
 					</uv-form-item>
 				</uv-form>
@@ -95,6 +100,7 @@ const uCode = ref();
 const uCodeSending = ref(false);
 const uCodeTips = ref('');
 const type = ref(props.bind ? 'bind' : 'login');
+const typeText = type.value == 'bind' ? '绑定' : '登录';
 const privacyPolicy = ref(false);
 const formRef = ref(null);
 const captchaSecond = ref(60);
@@ -170,6 +176,7 @@ const submit = async () => {
 		toast.value.error('请先获取验证码');
 		return;
 	}
+	form.value.username = form.value.email;
 	let res = {};
 	if (type.value == 'bind') {
 		res = await oAuthBindByCaptcha({ ...form.value, ...bindInfo });
