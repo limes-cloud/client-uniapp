@@ -35,6 +35,8 @@ export default {
 		// 已经登录则获取用户信息
 		if (hasToken()) {
 			await userStore.userinfo();
+		} else {
+			nav.login();
 		}
 	},
 	onShow: function () {},
@@ -57,6 +59,11 @@ page {
 	box-sizing: border-box;
 	width: 100%;
 	font-size: 28rpx;
+}
+
+uni-page-wrapper {
+	// 第三方跳转过来的时候会出现滑动异常
+	overflow-y: scroll;
 }
 
 .content {

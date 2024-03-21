@@ -103,10 +103,10 @@ const typeText = type.value == 'bind' ? '绑定' : '登录';
 const captchaBase64 = ref('');
 const timeInter = ref(null);
 
-const useUser = useUserStore();
+const userStore = useUserStore();
 
 const bindInfo = {
-	code: useUser.loginCode,
+	code: userStore.loginCode,
 	platform: getPlatform()
 };
 
@@ -163,8 +163,9 @@ const submit = async () => {
 		request = passwordLogin({ ...form.value });
 	}
 	request
-		.then((res) => {
+		.then(async (res) => {
 			setToken(res.token);
+			await userStore.userinfo();
 			nav.home();
 		})
 		.catch(() => {

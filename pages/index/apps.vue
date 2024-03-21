@@ -35,31 +35,31 @@ const appList = [
 	{
 		title: '党务新闻',
 		nav: nav.news,
-		desc: '党务新闻党务新闻党务新闻',
+		desc: '权威发布党建动态，传递基层好声音',
 		logo: newsLogo
 	},
 	{
 		title: '系统通知',
 		nav: nav.notice,
-		desc: '系统通知系统通知系统通知',
+		desc: '传递最新资讯，及时告知重要信息',
 		logo: noticeLogo
 	},
 	{
 		title: '党务资料',
 		nav: nav.resource,
-		desc: '党务资料党务资料党务资料',
+		desc: '知识宝库，智慧源泉，助力成长',
 		logo: resourceLogo
 	},
 	{
 		title: '党务任务',
 		nav: nav.task,
-		desc: '党务任务党务任务党务任务',
+		desc: '事项清单，高效管理，有序推进',
 		logo: taskLogo
 	},
 	{
 		title: '学习中心',
 		nav: nav.video,
-		desc: '学习中心学习中心学习中心',
+		desc: '知识港湾，智慧灯塔，点亮未来',
 		logo: studyLogo
 	}
 ];

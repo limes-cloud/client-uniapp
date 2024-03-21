@@ -18,15 +18,17 @@
 		<view class="header">
 			<uv-avatar v-if="userStore.avatar" :size="80" :src="$rurl(userStore.resource.src)"></uv-avatar>
 			<uv-avatar v-else :size="80" :src="logo"></uv-avatar>
-			<text class="username">{{ userStore.name }}</text>
+
+			<text class="username">{{ userStore.nick_name }}（{{ userStore.real_name }}）</text>
 		</view>
 		<view class="content">
 			<uv-cell-group :border="false">
-				<uv-cell
+				<uv-cell icon="woman" title="性别" :value="gender[userStore.gender]"></uv-cell>
+				<!-- <uv-cell
 					icon="account"
 					title="账号"
 					:value="userStore.username ? userStore.username : '未绑定'"
-				></uv-cell>
+				></uv-cell> -->
 				<uv-cell icon="phone" title="手机" :value="userStore.phone ? userStore.phone : '未绑定'"></uv-cell>
 				<uv-cell icon="email" title="邮箱" :value="userStore.email ? userStore.email : '未绑定'"></uv-cell>
 			</uv-cell-group>
@@ -35,9 +37,17 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import logo from '@/static/logo.png';
 import { useUserStore } from '@/library/store/user';
+import { getGenderDictValue } from '@/common/api/system/manager.js';
+
 const userStore = useUserStore();
+const gender = ref({});
+
+getGenderDictValue().then((res) => {
+	gender.value = res.dict;
+});
 
 const edit = () => {
 	uni.navigateTo({

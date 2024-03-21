@@ -14,7 +14,7 @@ import {
 export function createApp() {
 	const app = createSSRApp(App)
 	app.use(Pinia.createPinia());
-	app.use(new Vconsole())
+	// app.use(new Vconsole())
 	// 挂载全局对象
 	mounteGlobal(app)
 

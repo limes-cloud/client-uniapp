@@ -111,7 +111,7 @@ import NewsCard from '@/pages/app/news/card.vue';
 import NoticeCard from '@/pages/app/notice/card.vue';
 import TaskCard from '@/pages/app/task/card.vue';
 
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { allBanner } from '@/common/api/banner.js';
 import { pageNewsContent } from '@/common/api/news.js';
 import { nav } from '@/library/nav';
@@ -125,19 +125,16 @@ const taskList = ref([]);
 
 allBanner().then((res) => {
 	res.list.forEach((item, index) => {
-		res.list[index].image = formatUrl(item.resource.src, 300, 200);
+		res.list[index].image = formatUrl(item.resource.src);
 	});
 	bannerList.value = res.list;
 });
-
 pageNewsContent({ page: 1, page_size: 3 }).then((res) => {
 	newsList.value = res.list;
 });
-
 pageNotice({ page: 1, page_size: 3, not_read: true }).then((res) => {
 	noticeList.value = res.list;
 });
-
 pageTask({ page: 1, page_size: 3, not_finish: true }).then((res) => {
 	taskList.value = res.list;
 });

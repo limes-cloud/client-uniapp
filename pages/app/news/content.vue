@@ -3,7 +3,7 @@
 	<view class="content" v-if="data">
 		<view class="title">{{ data.title }}</view>
 		<view class="desc">
-			<view class="tag">
+			<view class="tag" v-if="data.is_top">
 				<uv-tags
 					type="success"
 					plain

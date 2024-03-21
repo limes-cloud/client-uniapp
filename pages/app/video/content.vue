@@ -4,6 +4,7 @@
 		<video
 			id="video"
 			object-fit="fill"
+			direction="90"
 			class="video"
 			@click="handleClickVideo"
 			:src="$rurl(current.resource.src)"

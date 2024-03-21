@@ -91,6 +91,7 @@ const agreement = ref(null);
 const props = defineProps({ id: String });
 const toast = ref();
 const appStore = useAppStore();
+const userStore = useUserStore();
 const uCode = ref();
 const uCodeSending = ref(false);
 const uCodeTips = ref('');
@@ -158,6 +159,7 @@ const submit = async () => {
 	}
 	const res = await captchaRegister({ ...form.value });
 	setToken(res.token);
+	await userStore.userinfo();
 	nav.home();
 };
 </script>

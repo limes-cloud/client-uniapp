@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<uv-toast ref="toast"></uv-toast>
 		<uv-no-network></uv-no-network>
 		<uv-navbar placeholder title="个人中心" auto-back></uv-navbar>
 		<uv-cell-group :border="false" style="margin-top: 30rpx">
@@ -61,6 +62,7 @@ import formatUrl from '@/library/global/resource.js';
 import { getGenderDictValue } from '@/common/api/system/manager.js';
 import { updateCurrentUser } from '@/common/api/system/user.js';
 
+const toast = ref();
 const formRef = ref();
 const rules = ref([]);
 const genderPickerRef = ref();
@@ -82,6 +84,8 @@ getGenderDictValue().then((res) => {
 
 const submit = async () => {
 	await updateCurrentUser(form);
+	toast.value.success('保存成功');
+	await userStore.userinfo();
 };
 
 const showGenderPicker = () => {

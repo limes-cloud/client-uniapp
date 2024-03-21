@@ -96,10 +96,10 @@ const type = ref(props.bind ? 'bind' : 'login');
 const typeText = type.value == 'bind' ? '绑定' : '登录';
 const toast = ref();
 const useApp = useAppStore();
-const useUser = useUserStore();
+const userStore = useUserStore();
 
 const loginInfo = {
-	code: useUser.loginCode,
+	code: userStore.loginCode,
 	platform: getPlatform()
 };
 
@@ -130,6 +130,7 @@ const handleLogin = async () => {
 	if (loginInfo.code) {
 		const data = await oAuthLogin({ ...loginInfo });
 		setToken(data.token);
+		await userStore.userinfo();
 		nav.home();
 	}
 };

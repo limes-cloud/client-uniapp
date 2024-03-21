@@ -102,6 +102,7 @@ const formRef = ref(null);
 const agreement = ref(null);
 const toast = ref();
 const appStore = useAppStore();
+const userStore = useUserStore();
 const privacyPolicy = ref(false);
 const captchaBase64 = ref('');
 const timeInter = ref(null);
@@ -195,8 +196,9 @@ const submit = async () => {
 	}
 	await formRef.value.validate();
 	passwordRegister({ ...form.value })
-		.then((res) => {
+		.then(async (res) => {
 			setToken(res.token);
+			await userStore.userinfo();
 			nav.home();
 		})
 		.catch(() => {
