@@ -35,7 +35,7 @@
 
 		<view class="read-view">
 			<view class="text">浏览{{ data.read }}次</view>
-			<view class="text">
+			<!-- <view class="text">
 				<uv-icon
 					:label="data.comments ? data.comments.length : 0"
 					label-color="#999"
@@ -43,9 +43,9 @@
 					label-size="12"
 					name="chat"
 				></uv-icon>
-			</view>
+			</view> -->
 		</view>
-		<view class="comment" v-if="data.comments && data.comments.length !== 0">
+		<!-- 	<view class="comment" v-if="data.comments && data.comments.length !== 0">
 			<view
 				v-for="(comment, ind) in data.comments"
 				:key="comment.id"
@@ -80,6 +80,7 @@
 			</view>
 			<uv-button :disabled="!commentText.trim()" type="primary" size="small" @click="comment">评论</uv-button>
 		</view>
+	 -->
 	</view>
 	<uv-action-sheet
 		ref="deleteSheetRef"
