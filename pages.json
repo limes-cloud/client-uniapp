@@ -71,6 +71,9 @@
 		},
 		{
 			"path": "pages/app/video/content"
+		},
+		{
+			"path": "pages/app/video/pdf"
 		}
 	],
 	"subPackages": [],

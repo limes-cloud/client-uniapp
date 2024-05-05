@@ -1,5 +1,8 @@
 import config from "@/common/config.js"
 export default (url, w, h) => {
+	if (!url) {
+		return ""
+	}
 	let suffix = '';
 
 	if (w && w > 0 && h && h > 0) {

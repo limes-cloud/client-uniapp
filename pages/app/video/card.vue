@@ -1,7 +1,7 @@
 <template>
 	<view class="item" v-for="(item, ind) in list" :key="ind" @click="open(item)">
 		<view class="cover">
-			<uv-image height="100%" width="100%" :src="$rurl(item.resource.src)"></uv-image>
+			<uv-image height="100%" width="100%" :src="$rurl(item.resource?.src)"></uv-image>
 		</view>
 		<view class="body">
 			<view class="title uv-line-1">{{ item.name }}</view>

@@ -26,7 +26,7 @@ export const useAppStore = defineStore('app', {
 			// #ifdef H5
 			window.document.title = info.name
 			// #endif
-			info.logo = info.resource.src
+			info.logo = info.resource?.src | ""
 			this.$patch({
 				...info,
 			});

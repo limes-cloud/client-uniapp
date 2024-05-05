@@ -1,13 +1,13 @@
 <template>
 	<uv-navbar autoBack border placeholder :title="title"></uv-navbar>
-	<view class="header" v-if="current">
+	<view class="header" v-if="current && !isPdf(current.resource?.src)">
 		<video
 			id="video"
 			object-fit="fill"
 			direction="90"
 			class="video"
 			@click="handleClickVideo"
-			:src="$rurl(current.resource.src)"
+			:src="$rurl(current.resource?.src)"
 			@error="videoErrorCallback"
 			@timeupdate="handleTimeUpdate"
 			@ended="handleEnd"
@@ -80,7 +80,6 @@ const fetchData = () => {
 		videoList.value = videoList.value.concat(res.list);
 		handlePlay(res.list[0]);
 		isTask.value = res.list[0].classify.is_task;
-
 		loadStatus.value = res.total <= params.page_size ? 'nomore' : 'loadmore';
 		setTimeout(() => {
 			playVideo();
@@ -101,7 +100,18 @@ const videoErrorCallback = () => {
 	toast.value.error('视频播放出错');
 };
 
+const isPdf = (url) => {
+	const arr = url.split('.');
+	return ['pdf', 'pdfx'].includes(arr[arr.length - 1]);
+};
+
 const handlePlay = (item) => {
+	if (isPdf(item.resource?.src)) {
+		uni.navigateTo({
+			url: './pdf?src=' + item.resource?.src + '&id=' + item.id
+		});
+		return;
+	}
 	if (!current.value || current.value.id != item.id) {
 		current.value = item;
 		if (!ctx.value) {
