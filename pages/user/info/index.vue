@@ -1,11 +1,18 @@
 <template>
 	<view>
 		<uv-no-network></uv-no-network>
-		<uv-navbar placeholder bgColor="#3c9cff" leftIcon="" title="个人中心" :titleStyle="{ color: '#fff' }">
+		<uv-navbar
+			placeholder
+			bgColor="#3c9cff"
+			:auto-back="false"
+			left-icon=""
+			title="个人中心"
+			:titleStyle="{ color: '#fff' }"
+		>
 			<template v-slot:right>
 				<view class="right">
 					<uv-icon
-						@click="edit"
+						@click="$to('./edit')"
 						name="edit-pen"
 						size="22"
 						color="#fff"
@@ -16,19 +23,19 @@
 			</template>
 		</uv-navbar>
 		<view class="header">
-			<uv-avatar v-if="userStore.avatar" :size="80" :src="$rurl(userStore.resource.src)"></uv-avatar>
-			<uv-avatar v-else :size="80" :src="logo"></uv-avatar>
+			<uv-avatar v-if="userStore.avatarUrl" :size="80" :src="$rurl(userStore.avatarUrl)"></uv-avatar>
+			<uv-avatar v-else :size="80" :src="$logo"></uv-avatar>
 
-			<text class="username">{{ userStore.nick_name }}（{{ userStore.real_name }}）</text>
+			<text class="username">{{ userStore.nickName }}</text>
 		</view>
 		<view class="content">
 			<uv-cell-group :border="false">
 				<uv-cell icon="woman" title="性别" :value="gender[userStore.gender]"></uv-cell>
-				<!-- <uv-cell
+				<uv-cell
 					icon="account"
 					title="账号"
 					:value="userStore.username ? userStore.username : '未绑定'"
-				></uv-cell> -->
+				></uv-cell>
 				<uv-cell icon="phone" title="手机" :value="userStore.phone ? userStore.phone : '未绑定'"></uv-cell>
 				<uv-cell icon="email" title="邮箱" :value="userStore.email ? userStore.email : '未绑定'"></uv-cell>
 			</uv-cell-group>
@@ -37,22 +44,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import logo from '@/static/logo.png';
+import { ref, getCurrentInstance } from 'vue';
 import { useUserStore } from '@/library/store/user';
-import { getGenderDictValue } from '@/common/api/system/manager.js';
 
 const userStore = useUserStore();
-const gender = ref({});
-
-getGenderDictValue().then((res) => {
-	gender.value = res.dict;
-});
-
-const edit = () => {
-	uni.navigateTo({
-		url: './edit'
-	});
+const gender = {
+	U: '未知',
+	M: '男',
+	F: '女'
 };
 </script>
 

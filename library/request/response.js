@@ -5,7 +5,7 @@
 
 import {
 	refreshToken,
-} from "@/common/api/system/auth"
+} from "@/common/api/system/usercenter"
 
 import {
 	getToken,
@@ -83,7 +83,7 @@ export default (vm) => {
 			return new Promise(() => {})
 		}
 
-		/* 对响应成功做点什么 可使用async await 做异步操作*/
+		console.log(data)
 		// 自定义参数
 		const custom = response.config?.custom
 		if (data.code !== 200) { // 服务端返回的状态码不等于200，则reject()

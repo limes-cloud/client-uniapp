@@ -1,35 +1,83 @@
 import {
 	defineStore,
 } from 'pinia';
+import {
+	nav
+} from '@/library/nav';
+import {
+	getAuthCode
+} from '../auth';
+
+const platform = () => {
+	return new Promise((resolve) => {
+		// #ifdef H5
+
+		// 特殊内嵌平台兼容
+		// yb
+		document.addEventListener("YibanDeviceReady", () => {
+			resolve("yb")
+		});
+		if (window.yiban) {
+			resolve("yb")
+			return
+		}
+		// #endif
+
+		resolve(uni.$uv.platform)
+	})
+}
 
 
 export const useAppStore = defineStore('app', {
 	state: () => {
 		return {
 			name: "",
-			logo: "",
+			logoUrl: "",
 			keyword: "",
+			status: false,
 			channels: [],
 			fields: [],
 			description: "",
-			resource: {
-				src: "",
-			},
-			allow_registry: false,
+			allowRegistry: false,
+			copyright: "",
+			version: "",
+			platform: "",
+			query: {},
 		};
 	},
 	getters: {
-		// double: (state) => state.count * 2,
+		suggestChannel: (state) => {
+			let data = {}
+			state.channels.forEach(item => {
+				if (item.keyword === state.platform) {
+					data = item
+				}
+			})
+			return data
+		},
+		loginTypes: (state) => {
+			return {
+				bind: '绑定',
+				login: '登陆',
+				register: '注册'
+			}
+		}
 	},
 	actions: {
-		set(info) {
+		async set(info) {
+			const pt = await platform();
+			console.log(pt)
 			// #ifdef H5
 			window.document.title = info.name
 			// #endif
-			info.logo = info.resource?.src | ""
 			this.$patch({
 				...info,
+				platform: pt,
 			});
 		},
+		authCode: async (state) => {
+			return getAuthCode()
+		}
+
 	},
 });

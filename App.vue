@@ -1,36 +1,28 @@
 <script>
-import config from '@/common/config.js';
-import { getAppInfo } from '@/common/api/system/app';
+import config from '@/common/config';
 import updrade from '@/library/upgrade';
+import { GetApp } from '@/common/api/system/usercenter';
 import { useAppStore } from '@/library/store/app';
 import { useUserStore } from '@/library/store/user';
-import { hasToken, getPlatform, setPlatform } from '@/library/auth';
-import { toUrlQuery } from '@/library/utils';
+import { hasToken } from '@/library/auth';
 import { nav } from '@/library/nav';
-import { platform } from '@/library/platform';
 
 export default {
 	onLaunch: async function (params) {
 		const userStore = useUserStore();
 		const appStore = useAppStore();
-
+		appStore.set({});
 		// 获取系统信息
 		uni.showLoading({ title: '加载中', mask: true });
-		const data = await getAppInfo();
-		appStore.set(data);
+		const data = await GetApp();
+		if (!data.status) {
+			uni.hideLoading();
+			nav.error(data.disableDesc);
+			return;
+		}
+		appStore.set({ ...data, query: params.query });
 		updrade();
 		uni.hideLoading();
-
-		// 获取平台名称
-		if (!getPlatform()) {
-			const pt = await platform();
-			setPlatform(pt);
-		}
-
-		// 获取yb跳转参数
-		if (params.query.verify_request) {
-			userStore.setLoginCode(params.query.verify_request);
-		}
 
 		// 已经登录则获取用户信息
 		if (hasToken()) {

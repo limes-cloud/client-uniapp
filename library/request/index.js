@@ -15,7 +15,7 @@ export default () => {
 			catch: true
 		}
 		defaultConfig.validateStatus = (statusCode) => { // statusCode 必存在。此处示例为全局默认配置
-			return statusCode >= 200 && statusCode <= 404
+			return statusCode >= 200 && statusCode <= 600
 		}
 		return defaultConfig
 	})

@@ -13,11 +13,11 @@
 		:confirmText="confirmText"
 		:cancelColor="cancelColor"
 		:confirmColor="confirmColor"
+		:round="round"
 		@close="close"
 		@cancel="cancel"
 		@confirm="confirm"
 		@change="change"
-		:round="round"
 	>
 	</uv-picker>
 </template>
@@ -78,7 +78,9 @@
 		},
 		watch: {
 			propsChange() {
-				this.init()
+				this.$uv.sleep(100).then(res=>{
+					this.init()
+				})
 			}
 		},
 		computed: {
@@ -106,8 +108,11 @@
 			},
 			open() {
 				this.$refs.picker.open();
-				this.getValue();
-				this.updateColumnValue(this.innerValue);
+				// 解决打开的前一次和当前日期错乱的BUG
+				setTimeout(()=>{
+					this.getValue();
+					this.updateColumnValue(this.innerValue);
+				},10)
 			},
 			close() {
 				this.$emit('close');

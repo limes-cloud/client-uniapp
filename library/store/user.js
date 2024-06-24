@@ -3,35 +3,34 @@ import {
 } from 'pinia';
 
 import {
-	currentUser
-} from "@/common/api/system/user";
+	GetCurrentUser
+} from "@/common/api/system/usercenter";
 
 export const useUserStore = defineStore('user', {
 	state: () => {
 		return {
 			id: 0,
-			loginCode: "",
-			real_name: "",
-			nick_name: "",
+			realName: "",
+			nickName: "",
 			username: "",
 			phone: "",
 			email: "",
 			avatar: "",
+			avatarUrl: "",
 			gender: "",
-			extra: {},
-			resource: null
+			isLogin: false,
 		};
 	},
 	getters: {
 
 	},
 	actions: {
-		setLoginCode(code) {
-			this.loginCode = code
-		},
 		async userinfo() {
-			const data = await currentUser();
-			this.setInfo(data);
+			const data = await GetCurrentUser();
+			this.setInfo({
+				...data,
+				isLogin: true
+			});
 		},
 		setInfo(partial) {
 			this.$patch(partial);

@@ -1,21 +1,29 @@
 <template>
 	<view>
-		<uv-navbar placeholder :title="'密码登录' + typeText" auto-back></uv-navbar>
+		<uv-navbar placeholder :title="'密码' + typeText" auto-back></uv-navbar>
 		<view class="content">
-			<view class="app">
-				<view class="title">{{ typeText }} {{ appStore.name }}</view>
-				<view class="desc">
-					{{ appStore.description }}
+			<view class="header">
+				<view class="logo">
+					<uv-image radius="8rpx" width="130rpx" height="130rpx" :src="$rurl(appStore.logoUrl)"></uv-image>
+				</view>
+
+				<view class="app">
+					<view class="title">
+						{{ typeText }} {{ appStore.name }}
+						<text class="version">{{ appStore.version }}</text>
+					</view>
+					<view class="desc">
+						{{ appStore.description }}
+					</view>
 				</view>
 			</view>
-
 			<view class="login form">
 				<uv-form :model="form" :rules="rules" ref="formRef" labelWidth="0">
 					<uv-form-item prop="username">
 						<uv-input
 							v-model="form.username"
 							prefixIcon="account"
-							placeholder="请输入账号/邮箱/手机"
+							placeholder="请输入账号"
 							:customStyle="{ padding: '16rpx 10rpx' }"
 							:prefixIconStyle="{ fontSize: '38rpx' }"
 							clearable
@@ -27,6 +35,17 @@
 							password
 							prefixIcon="lock"
 							placeholder="请输入密码"
+							:customStyle="{ padding: '16rpx 10rpx' }"
+							:prefixIconStyle="{ fontSize: '38rpx' }"
+							clearable
+						></uv-input>
+					</uv-form-item>
+					<uv-form-item v-if="type === 'register'" prop="dupPassword">
+						<uv-input
+							v-model="form.dupPassword"
+							password
+							prefixIcon="lock"
+							placeholder="请确认密码"
 							:customStyle="{ padding: '16rpx 10rpx' }"
 							:prefixIconStyle="{ fontSize: '38rpx' }"
 							clearable
@@ -51,13 +70,7 @@
 							</view>
 						</view>
 					</uv-form-item>
-					<uv-form-item v-if="agreement">
-						<AgreementRadio
-							ref="arRef"
-							v-model="privacyPolicy"
-							:agreements="agreement.contents"
-						></AgreementRadio>
-					</uv-form-item>
+
 					<uv-form-item>
 						<view class="submit">
 							<uv-button type="primary" :text="typeText" @click="submit"></uv-button>
@@ -68,7 +81,7 @@
 							<uv-button
 								type="primary"
 								:plain="true"
-								@click="back"
+								@click="$back"
 								:text="'更换' + typeText + '方式'"
 							></uv-button>
 						</view>
@@ -82,108 +95,150 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch, onUnmounted } from 'vue';
-import { passwordLogin, oAuthBindByPassword, passwordLoginCaptcha, oAuthBindImage } from '@/common/api/system/auth';
-import { getLoginAgreement } from '@/common/api/system/agreement';
-import { getPlatform, setToken } from '@/library/auth';
+import { ref, reactive, onMounted, onUnmounted, watch } from 'vue';
+import { setToken } from '@/library/auth';
 import { useAppStore } from '@/library/store/app';
 import { useUserStore } from '@/library/store/user';
 import { nav } from '@/library/nav';
-import AgreementRadio from '../agreement/agreement-radio.vue';
+import { PasswordBind, PasswordLogin, PasswordRegister, GenAuthCaptch } from '@/common/api/system/usercenter';
 
-const arRef = ref(null);
-const formRef = ref(null);
-const agreement = ref(null);
-const props = defineProps({ bind: String });
-const toast = ref();
-const appStore = useAppStore();
-const privacyPolicy = ref(false);
-const type = ref(props.bind ? 'bind' : 'login');
-const typeText = type.value == 'bind' ? '绑定' : '登录';
 const captchaBase64 = ref('');
 const timeInter = ref(null);
-
+const toast = ref();
+const appStore = useAppStore();
+const uCode = ref();
+const uCodeSending = ref(false);
+const uCodeTips = ref('');
+const formRef = ref(null);
+const captchaSecond = ref(180);
 const userStore = useUserStore();
+const props = defineProps({ type: String, oAuthUid: String });
+const typeText = appStore.loginTypes[props.type];
 
-const bindInfo = {
-	code: userStore.loginCode,
-	platform: getPlatform()
-};
-
-const form = ref({
+const form = reactive({
 	username: '',
 	password: '',
+	dupPassword: '',
+	oAuthUid: props.oAuthUid,
 	captcha: '',
-	captcha_id: '',
+	captchaId: '',
 	app: appStore.keyword
 });
+
 const rules = ref({
-	username: {
-		type: 'string',
-		required: true,
-		message: '请输入账号/邮箱/手机',
-		trigger: ['blur', 'change']
-	},
-	password: {
-		type: 'string',
-		required: true,
-		message: '请输入密码',
-		trigger: ['blur', 'change']
-	},
-	captcha: {
-		type: 'string',
-		required: true,
-		message: '请输入验证码',
-		trigger: ['blur', 'change']
-	}
+	username: [
+		{
+			required: true,
+			message: '请输入账号',
+			trigger: ['blur', 'change']
+		},
+		{
+			validator: (rule, value, callback) => {
+				if (!value) return true;
+				const regex = /^[a-zA-Z][a-zA-Z0-9_]{5,11}$/;
+				return regex.test(value);
+			},
+			message: '账号格式错误',
+			trigger: ['blur', 'change']
+		}
+	],
+	password: [
+		{
+			required: true,
+			message: '请输入密码',
+			trigger: ['blur', 'change']
+		},
+		{
+			validator: (rule, value, callback) => {
+				if (!value) return true;
+				const regex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/;
+				return regex.test(value);
+			},
+			message: '密码格式错误（包含英文、数字、最少8位）',
+			trigger: ['blur', 'change']
+		}
+	],
+	captcha: [
+		{
+			required: true,
+			message: '请输入验证码',
+			trigger: ['blur', 'change']
+		}
+	]
 });
 
-const getAgreementList = async () => {
-	agreement.value = await getLoginAgreement();
-};
-
-getAgreementList();
-
-const back = () => {
-	uni.navigateBack();
+const registerRule = {
+	dupPassword: [
+		{
+			validator: (rule, value, callback) => {
+				if (!value) return true;
+				return value === form.password;
+			},
+			message: '两次密码不一致',
+			trigger: ['blur', 'change']
+		}
+	]
 };
 
 // 登录
 const submit = async () => {
-	if (!privacyPolicy.value) {
-		arRef.value.show();
+	await formRef.value.validate();
+	if (!form.captchaId) {
+		toast.value.error('请先获取验证码');
 		return;
 	}
-	await formRef.value.validate();
-
-	var request = null;
-	if (type.value == 'bind') {
-		request = oAuthBindByPassword({ ...form.value, ...bindInfo });
-	} else {
-		request = passwordLogin({ ...form.value });
+	let res = {};
+	switch (props.type) {
+		case 'login':
+			res = await PasswordLogin(form);
+			toast.value.success('登陆成功');
+			break;
+		case 'bind':
+			res = await PasswordBind(form);
+			toast.value.success('绑定成功');
+			break;
+		case 'register':
+			res = await PasswordRegister(form);
+			toast.value.success('注册成功');
+			break;
 	}
-	request
-		.then(async (res) => {
-			setToken(res.token);
-			await userStore.userinfo();
-			nav.home();
-		})
-		.catch(() => {
-			fetchCaptcha();
-		});
+	if (!res.token) {
+		toast.value.error('登陆失败！');
+		return;
+	}
+
+	setToken(res.token);
+	await userStore.userinfo();
+	nav.home();
+};
+
+const getCaptchaType = () => {
+	switch (props.type) {
+		case 'login':
+			return 'loginImage';
+		case 'bind':
+			return 'bindImage';
+		case 'register':
+			return 'registerImage';
+		default:
+			return '';
+	}
 };
 
 const fetchCaptcha = async () => {
+	const type = getCaptchaType();
+	if (!type) {
+		toast.value.error('场景类型错误');
+		return;
+	}
+
 	// 清除定时器
 	clearInterval(timeInter.value);
+
 	// 请求验证码
-	let data = {};
-	if (type.value == 'bind') {
-		data = await oAuthBindImage();
-	} else {
-		data = await passwordLoginCaptcha();
-	}
-	form.value.captcha_id = data.id;
+	const data = await GenAuthCaptch({ type: type });
+	captchaSecond.value = data.expire;
+	form.captchaId = data.id;
 	captchaBase64.value = data.base64;
 	// 定时刷新
 	timeInter.value = setInterval(() => {
@@ -192,6 +247,12 @@ const fetchCaptcha = async () => {
 };
 
 onMounted(async () => {
+	if (props.type === 'register') {
+		rules.value = {
+			...rules.value,
+			...registerRule
+		};
+	}
 	fetchCaptcha();
 });
 

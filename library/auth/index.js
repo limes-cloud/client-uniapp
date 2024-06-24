@@ -1,3 +1,6 @@
+import {
+	useAppStore
+} from "../store/app";
 import config from "@/common/config.js"
 const TokenKey = 'uni_app_token';
 const PlatformKey = 'uni_app_platform';
@@ -18,19 +21,29 @@ export function removeToken() {
 	return uni.removeStorageSync(TokenKey)
 }
 
-export function setPlatform(platform) {
-	return uni.setStorageSync(PlatformKey, platform)
-}
 
-export function getPlatform() {
-	return uni.getStorageSync(PlatformKey)
-}
+export function getAuthCode() {
+	const appStore = useAppStore();
+	return new Promise((reslove, reject) => {
+		switch (appStore.platform) {
+			case "yb":
+				if (appStore.query.verify_request) reslove(appStore.query.verify_request)
+				else reject('请重新打开之后进入')
+				break
+			case "mp":
+			case "qq":
+				uni.login({
+					success(res) {
+						if (res.code) reslove(res.code)
+						else reject(res.errMsg)
+					},
+					fail(e) {
+						reject(res.errMsg)
+					}
+				})
+				break;
+		}
 
-export function getCode(info) {
-	switch (getPlatform()) {
-		case config.platform.yb:
-			window.location.href = "https://oauth.yiban.cn/code/html?client_id=" + config.yb.appid + "&redirect_uri=" +
-				config.yb.redirect + "&state=STATE"
+	})
 
-	}
 }

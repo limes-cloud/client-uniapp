@@ -13,78 +13,32 @@ export const nav = {
 		if (!isRedirectToLogin.value) {
 			isRedirectToLogin.value = true
 			uni.redirectTo({
-				url: "/pages/user/login/index"
+				url: "/pages/user/login/index?type=login"
 			})
 			setTimeout(() => {
 				isRedirectToLogin.value = false
 			}, 500)
 		}
-
 	},
-	readAgreement(id) {
-		uni.navigateTo({
-			url: '/pages/user/agreement/index?id=' + id
-		});
-	},
-	bind: () => {
+	bind: (id) => {
 		uni.redirectTo({
-			url: "/pages/user/login/index?bind=true"
+			url: "/pages/user/login/index?type=bind&oAuthUid=" + id
 		})
 	},
 	register: () => {
-		uni.navigateTo({
-			url: '/pages/user/register/index'
-		});
-
+		if (!isRedirectToLogin.value) {
+			isRedirectToLogin.value = true
+			uni.redirectTo({
+				url: "/pages/user/login/index?type=register"
+			})
+			setTimeout(() => {
+				isRedirectToLogin.value = false
+			}, 500)
+		}
 	},
 	error: (text) => {
 		uni.redirectTo({
 			url: "/pages/error/index?text=" + text
-		})
-	},
-	notice: (id) => {
-		uni.navigateTo({
-			url: "/pages/app/notice/index"
-		})
-	},
-	noticeContent: (id) => {
-		uni.navigateTo({
-			url: "/pages/app/notice/content?id=" + id
-		})
-	},
-	news: () => {
-		uni.navigateTo({
-			url: "/pages/app/news/index"
-		})
-	},
-	newsContent: (id) => {
-		uni.navigateTo({
-			url: "/pages/app/news/content?id=" + id
-		})
-	},
-	resource: () => {
-		uni.navigateTo({
-			url: "/pages/app/resource/index"
-		})
-	},
-	task: () => {
-		uni.navigateTo({
-			url: "/pages/app/task/index"
-		})
-	},
-	taskContent: (id) => {
-		uni.navigateTo({
-			url: "/pages/app/task/content?id=" + id
-		})
-	},
-	video: () => {
-		uni.navigateTo({
-			url: "/pages/app/video/index"
-		})
-	},
-	videoContent: (id) => {
-		uni.navigateTo({
-			url: "/pages/app/video/content?id=" + id
 		})
 	},
 	open: (path) => {

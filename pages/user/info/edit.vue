@@ -5,8 +5,8 @@
 		<uv-navbar placeholder title="个人中心" auto-back></uv-navbar>
 		<uv-cell-group :border="false" style="margin-top: 30rpx">
 			<uv-cell
-				:title="form.real_name ? form.real_name : '匿名用户'"
-				:label="form.nick_name ? form.nick_name : '这家伙很懒,什么都没留下'"
+				:title="form.realName ? form.realName : '匿名用户'"
+				:label="form.nickName ? form.nickName : '这家伙很懒,什么都没留下'"
 				:border="false"
 			>
 				<template v-slot:value>
@@ -19,7 +19,6 @@
 							accept="image"
 							@change="uploadSuccess"
 							path="user/logo"
-							app="UserCenter"
 						></me-upload>
 					</view>
 				</template>
@@ -28,11 +27,11 @@
 		<uv-gap height="15" bgColor="#f2f2f2"></uv-gap>
 		<view class="form-content">
 			<uv-form labelPosition="left" :model="form" :rules="rules" ref="formRef">
-				<uv-form-item label="姓名" prop="name" borderBottom>
-					<uv-input v-model="form.real_name" border="none"></uv-input>
-				</uv-form-item>
+				<!-- <uv-form-item label="姓名" prop="name" borderBottom>
+					<uv-input v-model="form.realName" border="none"></uv-input>
+				</uv-form-item> -->
 				<uv-form-item label="昵称" prop="nickname" borderBottom>
-					<uv-input v-model="form.nick_name" border="none"></uv-input>
+					<uv-input v-model="form.nickName" border="none"></uv-input>
 				</uv-form-item>
 				<uv-form-item label="性别" prop="gender" borderBottom @click="showGenderPicker">
 					<uv-input
@@ -50,40 +49,42 @@
 			</uv-form>
 		</view>
 
-		<uv-picker ref="genderPickerRef" :columns="[gender.list]" key-name="label" @confirm="chooseGender"></uv-picker>
+		<uv-picker ref="genderPickerRef" :columns="[genderList]" key-name="label" @confirm="chooseGender"></uv-picker>
 	</view>
 </template>
 
 <script setup>
 import { reactive, ref } from 'vue';
-import logo from '@/static/logo.png';
 import { useUserStore } from '@/library/store/user';
-import formatUrl from '@/library/global/resource.js';
-import { getGenderDictValue } from '@/common/api/system/manager.js';
-import { updateCurrentUser } from '@/common/api/system/user.js';
+import { UpdateCurrentUser } from '@/common/api/system/usercenter';
+
+const gender = {
+	U: '未知',
+	M: '男',
+	F: '女'
+};
+
+const genderList = [
+	{ value: 'M', label: '男' },
+	{ value: 'F', label: '女' },
+	{ value: 'U', label: '未知' }
+];
 
 const toast = ref();
 const formRef = ref();
 const rules = ref([]);
 const genderPickerRef = ref();
 const userStore = useUserStore();
-const gender = reactive({ dict: {}, list: [] });
 const form = reactive({
-	real_name: userStore.real_name,
-	nick_name: userStore.nick_name,
+	realName: userStore.realName,
+	nickName: userStore.nickName,
 	gender: userStore.gender,
-	genderName: '',
+	genderName: gender[userStore.gender],
 	avatar: userStore.avatar
 });
 
-getGenderDictValue().then((res) => {
-	gender.dict = res.dict;
-	gender.list = res.list;
-	form.genderName = res.dict[form.gender];
-});
-
 const submit = async () => {
-	await updateCurrentUser(form);
+	await UpdateCurrentUser(form);
 	toast.value.success('保存成功');
 	await userStore.userinfo();
 };
@@ -100,13 +101,13 @@ const chooseGender = (item) => {
 
 const files = () => {
 	const res = [];
-	if (userStore.resource) {
+	if (userStore.avatarUrl) {
 		res.push({
-			name: userStore.resource.name,
-			url: formatUrl(userStore.resource.src),
-			sha: userStore.resource.sha
+			url: uni.$global.$rurl(userStore.avatarUrl, 120, 120),
+			sha: userStore.avatar
 		});
 	}
+	console.log(res);
 	return res;
 };
 

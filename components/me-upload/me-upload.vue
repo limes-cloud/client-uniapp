@@ -5,11 +5,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, getCurrentInstance } from 'vue';
+import { ref, reactive } from 'vue';
 import config from '@/common/config.js';
-import crypto from '@/library/utils/crypto.js';
+import crypto from '@/library/crypto';
 import formatUrl from '@/library/global/resource.js';
-import { prepareUpload, upload } from '@/common/api/system/resource.js';
+import { PrepareUpload, Upload } from '@/common/api/system/resource.js';
+
+const instance = uni.$global;
 
 const props = defineProps({
 	fileList: {
@@ -55,18 +57,8 @@ const uploadFile = async (event) => {
 	});
 };
 
-// const binaryToBase64 = (buffer) => {
-// 	let binary = '';
-// 	const bytes = new Uint8Array(buffer);
-// 	const len = bytes.byteLength;
-// 	for (let i = 0; i < len; i += 1) {
-// 		binary += String.fromCharCode(bytes[i]);
-// 	}
-// 	return crypto.base64().btoa(binary);
-// };
-
 const binaryToSha = (binary) => {
-	return crypto.sha256(binary);
+	return crypto.md5(binary);
 };
 
 const toBinary = async (url) => {
@@ -115,12 +107,11 @@ const uploadFactory = async (file) => {
 	// 获取文件hash
 	const hash = binaryToSha(binary);
 	// 进行预传
-	const data = await prepareUpload({
-		directory_path: props.path,
-		app: props.app,
+	const data = await PrepareUpload({
+		directoryPath: props.path,
 		name: file.name,
 		sha: hash,
-		size: file.size
+		size: Math.ceil(file.size / 1024)
 	}).catch(() => {
 		onFailed(file);
 	});
@@ -133,13 +124,15 @@ const uploadFactory = async (file) => {
 		onSuccess(file, data);
 		return;
 	}
-	const count = data.chunk_count;
-	const size = data.chunk_size;
-	const uploaed = data.upload_chunks;
+
+	console.log(data);
+	const count = data.chunkCount;
+	const size = data.chunkSize;
+	const uploaed = data.uploadChunks;
 	const taskArr = [];
 
 	if (count <= 1) {
-		taskArr.push(upload(new Blob([binary]), { upload_id: data.upload_id, index: 1 }));
+		taskArr.push(Upload(new Blob([binary]), { uploadId: data.uploadId, index: 1 }));
 	} else {
 		for (let i = 0; i < count; i += 1) {
 			if (uploaed.includes(i + 1)) continue;
@@ -149,7 +142,7 @@ const uploadFactory = async (file) => {
 			} else {
 				sliceBinary = binary.slice(i * size, (i + 1) * size);
 			}
-			taskArr.push(upload(new Blob([sliceBinary]), { upload_id: data.upload_id, index: i + 1 }));
+			taskArr.push(Upload(new Blob([sliceBinary]), { uploadId: data.uploadId, index: i + 1 }));
 		}
 	}
 	taskArr.forEach((fn, index) => {
