@@ -1,5 +1,5 @@
-import repuest from "@/common/request.js"
-import config from "@/common/config.js"
+import repuest from "@/library/request"
+import config from "@/config"
 
 export const getDictValue = (keyword) => {
 	return repuest({

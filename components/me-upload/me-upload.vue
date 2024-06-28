@@ -6,10 +6,9 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
-import config from '@/common/config.js';
+import config from '@/config';
 import crypto from '@/library/crypto';
-import formatUrl from '@/library/global/resource.js';
-import { PrepareUpload, Upload } from '@/common/api/system/resource.js';
+import { PrepareUpload, Upload } from '@/api/system/resource.js';
 
 const instance = uni.$global;
 
@@ -77,7 +76,7 @@ const onSuccess = (file, data) => {
 		files[index].status = 'success';
 		files[index].message = '';
 		files[index].sha = data.sha;
-		files[index].source = formatUrl(data.src);
+		files[index].source = uni.$global.$rurl(data.src);
 		emit('change', files);
 		emit('success', files[index], index);
 	});

@@ -1,7 +1,8 @@
 import {
 	useAppStore
-} from "../store/app";
-import config from "@/common/config.js"
+} from "@/library/store/app";
+import config from "@/config"
+
 const TokenKey = 'uni_app_token';
 const PlatformKey = 'uni_app_platform';
 

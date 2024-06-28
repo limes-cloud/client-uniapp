@@ -56,7 +56,7 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { useUserStore } from '@/library/store/user';
-import { UpdateCurrentUser } from '@/common/api/system/usercenter';
+import { UpdateCurrentUser } from '@/api/system/usercenter';
 
 const gender = {
 	U: '未知',

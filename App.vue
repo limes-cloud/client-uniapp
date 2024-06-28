@@ -1,7 +1,7 @@
 <script>
-import config from '@/common/config';
+import config from '@/config';
 import updrade from '@/library/upgrade';
-import { GetApp } from '@/common/api/system/usercenter';
+import { GetApp } from '@/api/system/usercenter';
 import { useAppStore } from '@/library/store/app';
 import { useUserStore } from '@/library/store/user';
 import { hasToken } from '@/library/auth';

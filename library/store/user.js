@@ -4,7 +4,7 @@ import {
 
 import {
 	GetCurrentUser
-} from "@/common/api/system/usercenter";
+} from "@/api/system/usercenter";
 
 export const useUserStore = defineStore('user', {
 	state: () => {

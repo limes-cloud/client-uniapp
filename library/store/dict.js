@@ -24,15 +24,7 @@ export const useDictStore = defineStore('dict', {
 	},
 	actions: {
 		async init(info) {
-			// const pt = await platform();
-			// console.log(pt)
-			// // #ifdef H5
-			// window.document.title = info.name
-			// // #endif
-			// this.$patch({
-			// 	...info,
-			// 	platform: pt,
-			// });
+
 		}
 	},
 });

@@ -100,7 +100,7 @@ import { setToken } from '@/library/auth';
 import { useAppStore } from '@/library/store/app';
 import { useUserStore } from '@/library/store/user';
 import { nav } from '@/library/nav';
-import { PasswordBind, PasswordLogin, PasswordRegister, GenAuthCaptch } from '@/common/api/system/usercenter';
+import { PasswordBind, PasswordLogin, PasswordRegister, GenAuthCaptch } from '@/api/system/usercenter';
 
 const captchaBase64 = ref('');
 const timeInter = ref(null);

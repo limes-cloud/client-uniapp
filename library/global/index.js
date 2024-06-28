@@ -30,16 +30,4 @@ export default (app) => {
 		app.config.globalProperties[key] = global[key]
 		uni.$global[key] = global[key]
 	})
-	// app.config.globalProperties.$rurl = resource;
-	// app.config.globalProperties.$ft = formatTime;
-	// app.config.globalProperties.$pt = parseTime;
-	// app.config.globalProperties.$back = () => {
-	// 	uni.navigateBack()
-	// }
-	// app.config.globalProperties.$to = (path) => {
-	// 	uni.navigateTo({
-	// 		url: path
-	// 	});
-	// }
-	// app.config.globalProperties.$logo = logo
 }

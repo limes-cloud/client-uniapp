@@ -1,4 +1,4 @@
-import config from "@/common/config.js"
+import config from "@/config"
 export function toUrlQuery(obj) {
 	let arr = []
 	for (let key in obj) {

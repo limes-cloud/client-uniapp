@@ -1,5 +1,5 @@
 import JSEncrypt from 'jsencrypt/bin/jsencrypt.min';
-import config from "@/common/config.js"
+import config from "@/config"
 
 export default {
 	encode: (params) => {

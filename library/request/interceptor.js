@@ -1,11 +1,7 @@
-/**
- * 响应拦截
- * @param {Object} http 
- */
-
+import config from "@/config"
 import {
-	refreshToken,
-} from "@/common/api/system/usercenter"
+	refreshToken
+} from "@/api/system/usercenter"
 
 import {
 	getToken,
@@ -21,12 +17,23 @@ import {
 	nav
 } from "@/library/nav"
 
-// 是否正在刷新的标记
-let isRefresh = false;
-// 重试队列，每一项将是一个待执行的函数形式
-let requests = [];
+const request = (vm) => {
+	uni.$uv.http.interceptors.request.use(
+		(config) => {
+			// 可使用async await 做异步操作
+			// 初始化请求拦截器时，会执行此方法，此时data为undefined，赋予默认{}
+			config.data = config.data || {}
+			config.header = config.header || {}
+			config.header.Authorization = "Bearer " + getToken()
+			// 可以在此通过vm引用vuex中的变量，具体值在vm.$store.state中
+			// console.log(vm.$store.state);
+			return config
+		},
+		// 可使用async await 做异步操作
+		(config) => Promise.reject(config))
+}
 
-export default (vm) => {
+const response = (vm) => {
 	uni.$uv.http.interceptors.response.use((response) => {
 		// 请求成功直接返回
 		const data = response.data
@@ -104,4 +111,21 @@ export default (vm) => {
 		uni.$uv.toast("服务器开小差了～")
 		return Promise.reject(response)
 	})
+}
+
+export default () => {
+	uni.$uv.http.setConfig((defaultConfig) => {
+		/* defaultConfig 为默认全局配置 */
+		defaultConfig.baseURL = config.baseUrl /* 根域名 */
+		defaultConfig.custom = {
+			toast: true,
+			catch: true
+		}
+		defaultConfig.validateStatus = (statusCode) => { // statusCode 必存在。此处示例为全局默认配置
+			return statusCode >= 200 && statusCode <= 600
+		}
+		return defaultConfig
+	})
+	request();
+	response();
 }

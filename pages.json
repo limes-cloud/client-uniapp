@@ -3,9 +3,6 @@
 			"path": "pages/index/index"
 		},
 		{
-			"path": "pages/index/index2"
-		},
-		{
 			"path": "pages/error/index"
 		},
 		{
@@ -22,7 +19,7 @@
 		},
 		{
 			"path": "pages/user/info/edit"
-		},
+		}
 		// ,{
 		// 	"path": "pages/app/webview/index"
 		// },

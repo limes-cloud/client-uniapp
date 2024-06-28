@@ -1,5 +1,5 @@
-import repuest from "@/common/request.js"
-import config from "@/common/config"
+import repuest from "@/library/request"
+import config from "@/config"
 import crypto from "@/library/crypto"
 
 export const GetCurrentUser = (params) => {

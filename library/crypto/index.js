@@ -1,6 +1,6 @@
 import cryptoJs from 'crypto-js';
 import base64 from "./sdk/base64.js"
-import rsa from './rsa.js';
+import rsa from './sdk/rsa.js';
 
 export default {
 	sha256: (data) => {
