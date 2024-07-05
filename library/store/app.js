@@ -31,6 +31,7 @@ const platform = () => {
 export const useAppStore = defineStore('app', {
 	state: () => {
 		return {
+			id: 0,
 			name: "",
 			logoUrl: "",
 			keyword: "",

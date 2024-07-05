@@ -111,9 +111,25 @@ export const PasswordBind = (ps) => {
 	})
 }
 
-export const refreshToken = (params) => {
+export const RefreshToken = (params) => {
 	return repuest({
-		url: "/user-center/client/token/refresh",
+		url: "/usercenter/client/v1/token/refresh",
+		method: "post",
+		params
+	})
+}
+
+export const ListFeedbackCategory = (params) => {
+	return repuest({
+		url: "/usercenter/client/v1/feedback_categories",
+		method: "get",
+		params
+	})
+}
+
+export const CreateFeedback = (params) => {
+	return repuest({
+		url: "/usercenter/client/v1/feedback",
 		method: "post",
 		params
 	})

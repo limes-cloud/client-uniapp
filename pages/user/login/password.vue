@@ -1,6 +1,9 @@
 <template>
 	<view>
 		<uv-navbar placeholder :title="'密码' + typeText" auto-back></uv-navbar>
+		<uv-toast ref="toast"></uv-toast>
+		<uv-no-network></uv-no-network>
+
 		<view class="content">
 			<view class="header">
 				<view class="logo">
@@ -88,8 +91,6 @@
 					</uv-form-item>
 				</uv-form>
 			</view>
-			<uv-toast ref="toast"></uv-toast>
-			<uv-no-network></uv-no-network>
 		</view>
 	</view>
 </template>
@@ -180,6 +181,27 @@ const registerRule = {
 	]
 };
 
+const fetchCaptcha = async () => {
+	const type = getCaptchaType();
+	if (!type) {
+		toast.value.error('场景类型错误');
+		return;
+	}
+
+	// 清除定时器
+	clearInterval(timeInter.value);
+
+	// 请求验证码
+	const data = await GenAuthCaptch({ type: type });
+	captchaSecond.value = data.expire;
+	form.captchaId = data.id;
+	captchaBase64.value = data.base64;
+	// 定时刷新
+	timeInter.value = setInterval(() => {
+		fetchCaptcha();
+	}, data.expire * 1000);
+};
+
 // 登录
 const submit = async () => {
 	await formRef.value.validate();
@@ -190,15 +212,24 @@ const submit = async () => {
 	let res = {};
 	switch (props.type) {
 		case 'login':
-			res = await PasswordLogin(form);
+			res = await PasswordLogin(form).catch((e) => {
+				fetchCaptcha();
+				throw e;
+			});
 			toast.value.success('登陆成功');
 			break;
 		case 'bind':
-			res = await PasswordBind(form);
+			res = await PasswordBind(form).catch((e) => {
+				fetchCaptcha();
+				throw e;
+			});
 			toast.value.success('绑定成功');
 			break;
 		case 'register':
-			res = await PasswordRegister(form);
+			res = await PasswordRegister(form).catch((e) => {
+				fetchCaptcha();
+				throw e;
+			});
 			toast.value.success('注册成功');
 			break;
 	}
@@ -223,27 +254,6 @@ const getCaptchaType = () => {
 		default:
 			return '';
 	}
-};
-
-const fetchCaptcha = async () => {
-	const type = getCaptchaType();
-	if (!type) {
-		toast.value.error('场景类型错误');
-		return;
-	}
-
-	// 清除定时器
-	clearInterval(timeInter.value);
-
-	// 请求验证码
-	const data = await GenAuthCaptch({ type: type });
-	captchaSecond.value = data.expire;
-	form.captchaId = data.id;
-	captchaBase64.value = data.base64;
-	// 定时刷新
-	timeInter.value = setInterval(() => {
-		fetchCaptcha();
-	}, data.expire * 1000);
 };
 
 onMounted(async () => {

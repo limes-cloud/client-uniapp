@@ -1,6 +1,6 @@
 import config from "@/config"
 import {
-	refreshToken
+	RefreshToken
 } from "@/api/system/usercenter"
 
 import {
@@ -16,6 +16,8 @@ import {
 import {
 	nav
 } from "@/library/nav"
+
+
 
 const request = (vm) => {
 	uni.$uv.http.interceptors.request.use(
@@ -33,11 +35,17 @@ const request = (vm) => {
 		(config) => Promise.reject(config))
 }
 
+
+// 是否正在刷新的标记
+let isRefresh = false;
+// 重试队列，每一项将是一个待执行的函数形式
+let requests = [];
+
 const response = (vm) => {
 	uni.$uv.http.interceptors.response.use((response) => {
 		// 请求成功直接返回
 		const data = response.data
-		if (data.code === 200) {
+		if (response.statusCode === 200) {
 			return data.data || {}
 		}
 
@@ -61,7 +69,7 @@ const response = (vm) => {
 			if (data.reason === 'UNAUTHORIZED') {
 				if (!isRefresh) {
 					isRefresh = true;
-					return refreshToken()
+					return RefreshToken()
 						.then((res) => {
 							setToken(res.token);
 							// 重新请求
