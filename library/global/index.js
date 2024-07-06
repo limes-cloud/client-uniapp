@@ -5,29 +5,31 @@ import {
 	formatTime,
 	parseTime
 } from "./time.js"
+import {
+	useUserStore
+} from "@/library/store/user";
 
-
-const global = {
-	$rurl: resource,
-	$ft: formatTime,
-	$pt: parseTime,
-	$back: () => {
-		uni.navigateBack()
-	},
-	$to: (path) => {
-		uni.navigateTo({
-			url: path
-		});
-	},
-	$logo: logo
-}
 
 
 export default (app) => {
-	uni.$global = {}
-	const keys = Object.keys(global)
+	uni.$global = {
+		$rurl: resource,
+		$ft: formatTime,
+		$pt: parseTime,
+		$back: () => {
+			uni.navigateBack()
+		},
+		$to: (path) => {
+			uni.navigateTo({
+				url: path
+			});
+		},
+		$logo: logo,
+		$user: useUserStore()
+	}
+
+	const keys = Object.keys(uni.$global)
 	keys.forEach(key => {
-		app.config.globalProperties[key] = global[key]
-		uni.$global[key] = global[key]
+		app.config.globalProperties[key] = uni.$global[key]
 	})
 }

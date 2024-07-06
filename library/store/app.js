@@ -67,7 +67,6 @@ export const useAppStore = defineStore('app', {
 	actions: {
 		async set(info) {
 			const pt = await platform();
-			console.log(pt)
 			// #ifdef H5
 			window.document.title = info.name
 			// #endif

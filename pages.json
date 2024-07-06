@@ -6,6 +6,9 @@
 			"path": "pages/error/index"
 		},
 		{
+			"path": "pages/user/index"
+		},
+		{
 			"path": "pages/user/login/index"
 		},
 		{
@@ -18,10 +21,10 @@
 			"path": "pages/user/info/index"
 		},
 		{
-			"path": "pages/user/info/edit"
+			"path": "pages/user/feedback/index"
 		},
 		{
-			"path": "pages/user/feedback/index"
+			"path": "pages/user/setting/index"
 		},
 		{
 			"path": "pages/chat/index"
@@ -51,7 +54,7 @@
 				"text": "首页"
 			},
 			{
-				"pagePath": "pages/user/info/index",
+				"pagePath": "pages/user/index",
 				"iconPath": "static/tabbar/user.png",
 				"selectedIconPath": "static/tabbar/user-act.png",
 				"text": "个人"

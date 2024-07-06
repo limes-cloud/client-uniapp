@@ -3,8 +3,16 @@ import {
 } from 'pinia';
 
 import {
-	GetCurrentUser
+	GetCurrentUser,
+	Logout
 } from "@/api/system/usercenter";
+
+import {
+	nav
+} from '@/library/nav';
+import {
+	removeToken
+} from '../auth';
 
 export const useUserStore = defineStore('user', {
 	state: () => {
@@ -35,5 +43,13 @@ export const useUserStore = defineStore('user', {
 		setInfo(partial) {
 			this.$patch(partial);
 		},
+		async logout() {
+			await Logout();
+			this.$patch({
+				isLogin: false
+			});
+			removeToken()
+			nav.login();
+		}
 	},
 });

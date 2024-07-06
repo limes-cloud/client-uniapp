@@ -100,7 +100,6 @@ const handleLogin = async () => {
 	} else {
 		curAuthUid.value = res.oAuthUid;
 		bindModal.value.open();
-		// nav.bind(res.oAuthUid);
 	}
 };
 
@@ -110,7 +109,7 @@ const confirmBind = () => {
 
 const handleNav = (tp) => {
 	if (tp === 'email') {
-		let url = './email?type=' + props.type;
+		let url = '/pages/user/login/email?type=' + props.type;
 		if (props.oAuthUid) {
 			url = url + '&oAuthUid=' + props.oAuthUid;
 		}
@@ -118,7 +117,7 @@ const handleNav = (tp) => {
 	}
 
 	if (tp === 'password') {
-		let url = './password?type=' + props.type;
+		let url = '/pages/user/login/password?type=' + props.type;
 		if (props.oAuthUid) {
 			url = url + '&oAuthUid=' + props.oAuthUid;
 		}
@@ -138,10 +137,6 @@ onMounted(async () => {
 		return;
 	}
 
-	// appStore.suggestChannel();
-	// if (loginInfo.code && suggestLoggin.value) {
-	// 	handleLogin();
-	// }
 	loading.value = false;
 });
 </script>

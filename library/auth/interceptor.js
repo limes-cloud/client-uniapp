@@ -1,39 +1,40 @@
 import {
 	getToken
 } from "./index.js";
-
-const loginPage = "/pages/login/index"
+import {
+	nav
+} from "../nav";
 
 // 页面白名单，不受拦截
 const whiteList = [
-	'/pages/login/index',
+	'/pages/user/login/index',
+	'/pages/user/login/email',
+	'/pages/user/login/password',
+	'/pages/index/index',
+	'/pages/user/index',
+	'/'
 ]
 
-//const funcList = ["navigateTo", "redirectTo", "reLaunch", "switchTab"];
+const funcList = []
+// ["navigateTo", "redirectTo", "reLaunch", "switchTab"];
 
-let funcList = [];
 
 function hasPermission(url) {
 	const token = getToken()
-	console.log(token)
 	return whiteList.indexOf(url) !== -1 || token
 }
 
 funcList.forEach(item => {
 	uni.addInterceptor(item, {
 		invoke(e) {
-			console.log("e");
-			return false;
-			// if (!hasPermission(e.url)) {
-			// 	uni.reLaunch({
-			// 		url: loginPage
-			// 	})
-			// 	return false
-			// }
-			// return true
+			const arr = e.url.split("?")
+			const path = arr[0]
+			if (!hasPermission(path)) {
+				nav.login();
+				return false
+			}
+			return true
 		},
 		success(e) {}
 	})
 })
-
-// 页面跳转前进行拦截, invoke根据返回值进行判断是否继续执行跳转

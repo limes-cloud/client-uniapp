@@ -24,12 +24,16 @@ export default {
 		updrade();
 		uni.hideLoading();
 
-		// 已经登录则获取用户信息
+		// 如果需要一开始就登陆系统，就揭开以下注释
 		if (hasToken()) {
 			await userStore.userinfo();
-		} else {
-			nav.login();
 		}
+		// 已经登录则获取用户信息
+		// if (hasToken()) {
+		// 	await userStore.userinfo();
+		// } else {
+		// 	nav.login();
+		// }
 	},
 	onShow: function () {},
 	onHide: function () {},
@@ -64,6 +68,9 @@ uni-page-wrapper {
 .margin-top-10 {
 	margin-top: 20rpx;
 }
+.margin-top-20 {
+	margin-top: 40rpx;
+}
 .uv-tags--small {
 	height: 14px;
 	line-height: 14px;
@@ -76,6 +83,12 @@ uni-page-wrapper {
 
 	span {
 		white-space: nowrap;
+	}
+}
+
+.uv-cell {
+	.uv-line {
+		border-bottom: 1px solid #e9ecf0 !important;
 	}
 }
 </style>

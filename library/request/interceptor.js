@@ -67,6 +67,7 @@ const response = (vm) => {
 
 			// token认证失败处理
 			if (data.reason === 'UNAUTHORIZED') {
+				console.log(isRefresh)
 				if (!isRefresh) {
 					isRefresh = true;
 					return RefreshToken()
@@ -83,6 +84,7 @@ const response = (vm) => {
 							return new Promise(() => {})
 						})
 						.finally(() => {
+							console.log("down", isRefresh)
 							isRefresh = false;
 						});
 				}

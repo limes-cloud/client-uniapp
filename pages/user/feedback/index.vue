@@ -2,7 +2,7 @@
 	<view>
 		<uv-toast ref="toastRef"></uv-toast>
 		<uv-no-network></uv-no-network>
-		<uv-navbar placeholder :auto-back="false" leftText="返回" title="问题反馈"></uv-navbar>
+		<uv-navbar placeholder auto-back leftText="返回" title="问题反馈"></uv-navbar>
 		<view class="content">
 			<uv-form ref="formRef" :model="form" :rules="rules" label-position="top" labelWidth="120" class="form">
 				<uv-form-item label="分类" prop="categoryId" @click="showCategorySelect">
@@ -56,9 +56,6 @@ const userStore = useUserStore();
 const appStore = useAppStore();
 const sys = uni.$uv.sys();
 const toastRef = ref();
-
-console.log(sys);
-
 const imageCount = ref(0);
 const form = ref({
 	appId: appStore.id,

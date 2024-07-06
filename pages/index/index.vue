@@ -1,5 +1,4 @@
 <template>
-	<me-chat></me-chat>
 	<view class="hello">
 		<uv-image radius="8rpx" width="250rpx" height="250rpx" :src="$logo"></uv-image>
 		<div class="text">Hello Go-Platform</div>

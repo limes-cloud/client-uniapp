@@ -134,3 +134,10 @@ export const CreateFeedback = (params) => {
 		params
 	})
 }
+
+export const Logout = () => {
+	return repuest({
+		url: "/usercenter/client/v1/logout",
+		method: "post"
+	})
+}
