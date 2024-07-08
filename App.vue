@@ -13,15 +13,19 @@ export default {
 		const appStore = useAppStore();
 		appStore.set({});
 		// 获取系统信息
-		uni.showLoading({ title: '加载中', mask: true });
+		uni.showLoading({ title: '加载中', mask: false });
 		const data = await GetApp();
+		console.log(data);
 		if (!data.status) {
 			uni.hideLoading();
 			nav.error(data.disableDesc);
 			return;
 		}
+		console.log('close 1');
+
 		appStore.set({ ...data, query: params.query });
 		updrade();
+		console.log('close 2');
 		uni.hideLoading();
 
 		// 如果需要一开始就登陆系统，就揭开以下注释

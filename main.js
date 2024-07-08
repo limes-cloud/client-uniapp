@@ -5,7 +5,7 @@ import setting from '@/library/setting';
 import "@/library/auth/interceptor"
 import interceptor from '@/library/request/interceptor'
 import * as Pinia from 'pinia';
-
+import Vconsole from 'vconsole';
 import "@/library/auth";
 
 import {
@@ -15,6 +15,9 @@ import {
 export function createApp() {
 	const app = createSSRApp(App)
 	app.use(Pinia.createPinia());
+	// app.use(new Vconsole())
+
+	new Vconsole()
 
 	// 挂载全局对象
 	mounteGlobal(app)

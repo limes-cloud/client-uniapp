@@ -25,7 +25,7 @@
 						:maxCount="3"
 						accept="image"
 						@change="uploadFeedbackImages"
-						path="user/feedback"
+						path="usercenter/user/feedback"
 					></me-upload>
 				</uv-form-item>
 				<uv-form-item label="联系方式" prop="contact">

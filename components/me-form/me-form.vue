@@ -155,7 +155,7 @@
 								:maxCount="1"
 								:accept="component.config.filetype"
 								@change="uploadSuccess(component, $event)"
-								:path="'task/' + id"
+								:path="'partyaffairs/task/' + id"
 								app="PartyAffairs"
 							></me-upload>
 						</uv-form-item>
@@ -171,7 +171,6 @@
 import { computed, ref } from 'vue';
 import { handleModel, handleRules } from './form.js';
 import { parseTime } from '@/library/global/time.js';
-import { getBySha } from '@/common/api/system/resource.js';
 
 const datetimePicker = ref();
 const datetimeValue = ref();

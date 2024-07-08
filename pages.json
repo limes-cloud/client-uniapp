@@ -3,6 +3,9 @@
 			"path": "pages/index/index"
 		},
 		{
+			"path": "pages/index/apps"
+		},
+		{
 			"path": "pages/error/index"
 		},
 		{
@@ -27,17 +30,47 @@
 			"path": "pages/user/setting/index"
 		},
 		{
-			"path": "pages/chat/index"
+			"path": "pages/app/notice/index"
+		},
+		{
+			"path": "pages/app/notice/content"
+		},
+		{
+			"path": "pages/app/news/index"
+		},
+		{
+			"path": "pages/app/news/content"
+		},
+		{
+			"path": "pages/app/resource/index"
+		},
+		{
+			"path": "pages/app/resource/content"
+		},
+		{
+			"path": "pages/app/task/index"
+		},
+		{
+			"path": "pages/app/task/content"
+		},
+		{
+			"path": "pages/app/video/index"
+		},
+		{
+			"path": "pages/app/video/content"
+		},
+		{
+			"path": "pages/app/video/pdf"
+		},
+		{
+			"path": "pages/app/resource/pdf"
 		}
-		// ,{
-		// 	"path": "pages/app/webview/index"
-		// },
 	],
 	"subPackages": [],
 	"globalStyle": {
 		"navigationStyle": "custom",
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "客户端",
+		"navigationBarTitleText": "信号灯",
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#FFFFFF"
 	},
@@ -52,6 +85,11 @@
 				"iconPath": "static/tabbar/home.png",
 				"selectedIconPath": "static/tabbar/home-act.png",
 				"text": "首页"
+			}, {
+				"pagePath": "pages/index/apps",
+				"iconPath": "static/tabbar/apps.png",
+				"selectedIconPath": "static/tabbar/apps-act.png",
+				"text": "应用"
 			},
 			{
 				"pagePath": "pages/user/index",
@@ -59,18 +97,6 @@
 				"selectedIconPath": "static/tabbar/user-act.png",
 				"text": "个人"
 			}
-			// ,{
-			// 	"pagePath": "pages/index/apps",
-			// 	"iconPath": "static/tabbar/apps.png",
-			// 	"selectedIconPath": "static/tabbar/apps-act.png",
-			// 	"text": "应用"
-			// // },
-			// {
-			// 	"pagePath": "pages/user/info/index",
-			// 	"iconPath": "static/tabbar/user.png",
-			// 	"selectedIconPath": "static/tabbar/user-act.png",
-			// 	"text": "个人"
-			// }
 		]
 	},
 	"condition": { //模式配置，仅开发期间生效

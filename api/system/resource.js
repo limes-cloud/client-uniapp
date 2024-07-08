@@ -22,12 +22,12 @@ export const Upload = (file, params) => {
 	})
 }
 
-// export const getBySha = (sha) => {
-// 	return repuest({
-// 		url: "/resource/client/v1/file/sha",
-// 		method: "get",
-// 		params: {
-// 			sha: sha
-// 		}
-// 	})
-// }
+export const GetFileBySha = (sha) => {
+	return repuest({
+		url: "/resource/client/v1/file",
+		method: "get",
+		params: {
+			sha: sha
+		}
+	})
+}

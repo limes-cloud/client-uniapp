@@ -24,7 +24,7 @@
 							:previewFullImage="false"
 							accept="image"
 							@change="uploadSuccess"
-							path="user/logo"
+							path="usercenter/user/logo"
 						>
 							<uv-image
 								v-if="userInfo.avatar"

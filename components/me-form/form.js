@@ -1,6 +1,3 @@
-import {
-	getBySha
-} from "@/common/api/system/resource";
 import formatUrl from "@/library/global/resource";
 
 const rules = {
