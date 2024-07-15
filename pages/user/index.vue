@@ -50,29 +50,32 @@
 			</view> -->
 
 			<view class="card" style="margin-top: -30rpx">
-				<uv-cell-group :border="false">
-					<uv-cell
-						icon="account-fill"
-						title="个人信息"
-						:border="false"
-						isLink
-						url="/pages/user/info/index"
-					></uv-cell>
-					<uv-cell
-						icon="warning-fill"
-						title="问题反馈"
-						:border="false"
-						isLink
-						url="/pages/user/feedback/index"
-					></uv-cell>
-					<uv-cell
-						icon="setting-fill"
-						title="系统设置"
-						:border="false"
-						isLink
-						url="/pages/user/setting/index"
-					></uv-cell>
-				</uv-cell-group>
+        <uv-cell-group :border="false">
+          <uv-cell
+              icon="account-fill"
+              title="个人信息"
+              :border="false"
+              clickable
+              isLink
+              @click="$to('/pages/user/info/index')"
+          ></uv-cell>
+          <uv-cell
+              icon="warning-fill"
+              title="问题反馈"
+              clickable
+              :border="false"
+              isLink
+              @click="$to('/pages/user/feedback/index')"
+          ></uv-cell>
+          <uv-cell
+              icon="setting-fill"
+              title="系统设置"
+              clickable
+              :border="false"
+              isLink
+              @click="$to('/pages/user/setting/index')"
+          ></uv-cell>
+        </uv-cell-group>
 			</view>
 		</view>
 	</view>
