@@ -108,7 +108,6 @@ const fetchFeedbackCategories = async () => {
 	const params = { page: 1, pageSize: 50 };
 	const data = await ListFeedbackCategory(params);
 	categories.value = data.list;
-	console.log(categories.value);
 };
 
 fetchFeedbackCategories();
