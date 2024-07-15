@@ -135,7 +135,7 @@ const taskList = ref([]);
 
 allBanner().then((res) => {
 	res.list.forEach((item, index) => {
-		res.list[index].image = formatUrl(item.resource?.src);
+		res.list[index].image = formatUrl(item.resource?.url);
 	});
 	bannerList.value = res.list;
 });

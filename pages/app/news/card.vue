@@ -38,7 +38,7 @@
 					radius="4"
 					lazyLoad
 					observeLazyLoad
-					:src="$rurl(item.resource.src)"
+					:src="$rurl(item.resource.url)"
 				></uv-image>
 			</view>
 			<view class="footer">
