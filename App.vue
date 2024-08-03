@@ -24,16 +24,12 @@ export default {
 		updrade();
 		uni.hideLoading();
 
-		// 如果需要一开始就登陆系统，就揭开以下注释
-		if (hasToken()) {
-			await userStore.userinfo();
-		}
 		// 已经登录则获取用户信息
-		// if (hasToken()) {
-		// 	await userStore.userinfo();
-		// } else {
-		// 	nav.login();
-		// }
+		if (hasToken()) {
+			 userStore.userinfo().catch(()=>{nav.login()});
+		} else {
+			nav.login();
+		}
 	},
 	onShow: function () {},
 	onHide: function () {},
