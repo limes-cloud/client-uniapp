@@ -27,11 +27,32 @@
 			"path": "pages/user/setting/index"
 		},
 		{
-			"path": "pages/chat/index"
+			"path": "pages/index/chat"
+		},
+		{
+			"path": "pages/app/notice/index"
+		},
+		{
+			"path": "pages/app/notice/content"
+		},
+		{
+			"path": "pages/app/information/index"
+		},
+		{
+			"path": "pages/app/information/content"
+		},
+		{
+			"path": "pages/app/activity/index"
+		},
+		{
+			"path": "pages/app/activity/content"
+		},
+		{
+			"path": "pages/app/file/index"
+		},
+		{
+			"path": "pages/index/comment"
 		}
-		// ,{
-		// 	"path": "pages/app/webview/index"
-		// },
 	],
 	"subPackages": [],
 	"globalStyle": {
@@ -54,23 +75,23 @@
 				"text": "首页"
 			},
 			{
+				"pagePath": "pages/index/chat",
+				"iconPath": "static/tabbar/chatbot.png",
+				"selectedIconPath": "static/tabbar/chatbot-act.png",
+				"text": "咨询"
+			},
+			{
+				"pagePath": "pages/index/comment",
+				"iconPath": "static/tabbar/comment.png",
+				"selectedIconPath": "static/tabbar/comment-act.png",
+				"text": "留言"
+			},
+			{
 				"pagePath": "pages/user/index",
 				"iconPath": "static/tabbar/user.png",
 				"selectedIconPath": "static/tabbar/user-act.png",
 				"text": "个人"
 			}
-			// ,{
-			// 	"pagePath": "pages/index/apps",
-			// 	"iconPath": "static/tabbar/apps.png",
-			// 	"selectedIconPath": "static/tabbar/apps-act.png",
-			// 	"text": "应用"
-			// // },
-			// {
-			// 	"pagePath": "pages/user/info/index",
-			// 	"iconPath": "static/tabbar/user.png",
-			// 	"selectedIconPath": "static/tabbar/user-act.png",
-			// 	"text": "个人"
-			// }
 		]
 	},
 	"condition": { //模式配置，仅开发期间生效

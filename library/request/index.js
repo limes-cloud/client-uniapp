@@ -8,13 +8,14 @@ function request(info) {
 	if (method === "get") {
 		return uni.$uv.http.get(url, {
 			params: params,
-			header: header
+			header: header,
+			enableChunked: true,
 		})
 	}
 
 	if (method === "post") {
 		return uni.$uv.http.post(url, params, {
-			header: header
+			header: header,
 		})
 	}
 

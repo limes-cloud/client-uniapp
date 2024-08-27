@@ -1,6 +1,8 @@
 import resource from "./resource.js"
 import logo from '@/static/logo.png';
-
+import {
+	nav
+} from "../nav/index.js"
 import {
 	formatTime,
 	parseTime
@@ -24,6 +26,7 @@ export default (app) => {
 				url: path
 			});
 		},
+		$nav: nav,
 		$logo: logo,
 		$user: useUserStore()
 	}

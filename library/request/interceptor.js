@@ -48,8 +48,8 @@ const response = (vm) => {
 		if (response.statusCode === 200) {
 			return data.data || {}
 		}
-
 		if (response.statusCode === 401 && data.reason !== 'UnBind' && getToken() == "") {
+
 			nav.login();
 			return new Promise(() => {})
 		}
@@ -67,7 +67,6 @@ const response = (vm) => {
 
 			// token认证失败处理
 			if (data.reason === 'UNAUTHORIZED') {
-				console.log(isRefresh)
 				if (!isRefresh) {
 					isRefresh = true;
 					return RefreshToken()
@@ -84,23 +83,18 @@ const response = (vm) => {
 							return new Promise(() => {})
 						})
 						.finally(() => {
-							console.log("down", isRefresh)
 							isRefresh = false;
 						});
 				}
-
 				return new Promise((resolve) => {
 					requests.push(() => {
 						resolve(uni.$uv.http.request(response.config))
 					});
 				});
 			}
-
-			nav.login();
-			return new Promise(() => {})
+			return Promise.reject(data.message)
 		}
 
-		console.log(data)
 		// 自定义参数
 		const custom = response.config?.custom
 		if (data.code !== 200) { // 服务端返回的状态码不等于200，则reject()
@@ -116,6 +110,7 @@ const response = (vm) => {
 				return new Promise(() => {})
 			}
 		}
+
 		return data.data || {}
 	}, (response) => {
 		uni.$uv.toast("服务器开小差了～")

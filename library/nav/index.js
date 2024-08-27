@@ -9,6 +9,9 @@ export const nav = {
 			url: '/pages/index/index'
 		});
 	},
+	back: () => {
+		uni.navigateBack()
+	},
 	login: () => {
 		if (!isRedirectToLogin.value) {
 			isRedirectToLogin.value = true

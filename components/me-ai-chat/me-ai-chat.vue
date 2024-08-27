@@ -6,10 +6,10 @@
 		<view
 			class="chat-box"
 			:style="{
-				height: 'calc(100vh - ' + $uv.addUnit(44 + $uv.sys().statusBarHeight, 'px') + ')'
+				height: 'calc(100vh - ' + overHeight + ') '
 			}"
 		>
-			<view class="pre-content" v-if="!sessionId">
+			<view class="pre-content" v-if="!sessionId && !msgList.length">
 				<uv-image
 					:src="logo"
 					mode="widthFix"
@@ -68,14 +68,19 @@
 						:class="item.type == 'reply' ? 'left-msg-box' : 'right-msg-box'"
 						:id="'last_' + index"
 					>
-						<view v-if="item.type == 'reply'" class="left-msg">
+						<view
+							v-if="item.type == 'reply'"
+							class="left-msg"
+							:class="item.status === 'error' ? 'msg-error' : ''"
+						>
 							<template v-if="isProcess && index == 0">
 								<view v-if="!item.text" class="innter-col-flex">
 									<uv-image :src="loading" height="12px" width="24px"></uv-image>
 									<text class="wait">正在思考中</text>
 								</view>
-								<view v-else>
-									<text>{{ item.text }}</text>
+								<view v-else class="chat-parse-content">
+									<uv-parse :content="marked(item.text)" :selectable="true"></uv-parse>
+									<!-- <text>{{ item.text }}</text> -->
 									<uv-image
 										class="innter-col-flex"
 										:src="loading"
@@ -84,9 +89,9 @@
 									></uv-image>
 								</view>
 							</template>
-							<template v-else>
-								<text>{{ item.text }}</text>
-							</template>
+							<view v-else class="chat-parse-content">
+								<uv-parse :content="marked(item.text)" :selectable="true"></uv-parse>
+							</view>
 						</view>
 						<view v-else class="right-msg">{{ item.text }}</view>
 					</view>
@@ -94,7 +99,13 @@
 			</view>
 			<view class="chat-footer form">
 				<view class="clear">
-					<uv-icon name="clear" color="#ddd" size="20" custom-prefix="custom-icon"></uv-icon>
+					<uv-icon
+						@click="handleClear"
+						name="clear"
+						:color="msgList.length && !isProcess ? '#3c9cff' : '#ddd'"
+						size="20"
+						custom-prefix="custom-icon"
+					></uv-icon>
 				</view>
 				<uv-input
 					placeholder="请输入内容"
@@ -126,13 +137,13 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits, defineExpose, nextTick, onMounted } from 'vue';
+import { ref, defineProps, defineEmits, defineExpose, nextTick, onMounted, computed } from 'vue';
 import sendLogo from './send.png';
 import loading from './loading.gif';
-import { email } from '../../uni_modules/uv-ui-tools/libs/function/test';
+import { marked } from 'marked';
 
 const emit = defineEmits(['send']);
-defineProps({
+const props = defineProps({
 	title: String,
 	logo: String,
 	app: String,
@@ -146,10 +157,24 @@ defineProps({
 	maxlength: {
 		type: Number,
 		default: 120
+	},
+	hasTabbar: {
+		type: Boolean,
+		default: false
 	}
 });
 
-const sessionId = ref('1');
+const overHeight = computed(() => {
+	const sys = uni.$uv.sys();
+	// return uni.$uv.addUnit(44 + sys.statusBarHeight, 'px');
+	if (props.hasTabbar) {
+		return uni.$uv.addUnit(44 + sys.statusBarHeight + 1 * sys.windowBottom, 'px');
+	} else {
+		return uni.$uv.addUnit(44 + sys.statusBarHeight, 'px');
+	}
+});
+
+const sessionId = ref('');
 const isProcess = ref(false);
 
 const inputValue = ref('');
@@ -165,6 +190,11 @@ const handleInput = (val) => {
 };
 
 const handleGuiding = (value) => {
+	if (value.type === 'question') {
+		msgList.value.push({ type: 'send', text: value.text });
+		emit('send', sessionId.value, value.text);
+		isSend.value = false;
+	}
 	console.log(value);
 };
 
@@ -172,26 +202,43 @@ const handleSend = () => {
 	if (!(isSend.value && !isProcess.value)) {
 		return;
 	}
-	emit('send', inputValue.value);
 	msgList.value.push({ type: 'send', text: inputValue.value });
+	emit('send', sessionId.value, inputValue.value);
 	inputValue.value = '';
 	isSend.value = false;
 };
 
 const repleier = {
-	send: (msg) => {
-		console.log(msg);
+	send: (sid, msg) => {
+		sessionId.value = sid;
 		const index = msgList.value.length - 1;
 		if (isProcess.value) {
 			msgList.value[index].text += msg;
 		} else {
+			console.log('push');
 			isProcess.value = true;
-			msgList.value.push({ type: 'reply', text: inputValue.value });
+			msgList.value.push({ type: 'reply', text: msg, status: 'process' });
 		}
 	},
 	close: () => {
 		isProcess.value = false;
+		const index = msgList.value.length - 1;
+		msgList.value[index].status = 'done';
+	},
+	error: (msg) => {
+		isProcess.value = false;
+		const index = msgList.value.length - 1;
+		msgList.value[index].status = 'error';
+		msgList.value[index].text = msg;
 	}
+};
+
+const handleClear = () => {
+	if (isProcess.value || !msgList.value.length) {
+		return;
+	}
+	msgList.value = [];
+	sessionId.value = '';
 };
 
 defineExpose({ repleier });
@@ -203,15 +250,21 @@ defineExpose({ repleier });
 }
 </style>
 <style lang="scss" scoped>
+.chat-parse-content {
+	width: 100%;
+	overflow: hidden;
+}
 .chat {
 	width: 100%;
 	height: 100%;
+	overflow: hidden;
 	.chat-box {
 		background-color: #f3f5f9;
 		width: 100%;
 		position: relative;
 		display: flex;
 		flex-direction: column;
+		overflow: hidden;
 		.chat-content {
 			height: 100%;
 			padding: 40rpx;
@@ -264,7 +317,9 @@ defineExpose({ repleier });
 					display: inline-block;
 					border-radius: 16rpx;
 					background: #fff;
+					box-sizing: border-box;
 					padding: 30rpx;
+					max-width: 100%;
 				}
 				.left-msg {
 					.innter-col-flex {
@@ -276,6 +331,10 @@ defineExpose({ repleier });
 						margin-left: 10rpx;
 						color: #84868c;
 					}
+				}
+				.msg-error {
+					border: 1px solid red;
+					color: red;
 				}
 				.right-msg {
 					background-color: #3c9cff;

@@ -26,7 +26,9 @@ export default {
 
 		// 已经登录则获取用户信息
 		if (hasToken()) {
-			 userStore.userinfo().catch(()=>{nav.login()});
+			userStore.userinfo().catch(() => {
+				nav.login();
+			});
 		} else {
 			nav.login();
 		}
@@ -55,7 +57,7 @@ page {
 
 uni-page-wrapper {
 	// 第三方跳转过来的时候会出现滑动异常
-	overflow-y: scroll;
+	// overflow-y: scroll;
 }
 
 .content {
@@ -86,5 +88,21 @@ uni-page-wrapper {
 	.uv-line {
 		border-bottom: 1px solid #e9ecf0 !important;
 	}
+}
+
+@mixin flex($direction: row) {
+	/* #ifndef APP-NVUE */
+	display: flex;
+	/* #endif */
+	flex-direction: $direction;
+}
+.uv-nav-slot {
+	@include flex;
+	align-items: center;
+	justify-content: space-between;
+	border: 0.5px solid #fff;
+	border-radius: 100px;
+	padding: 3px 7px;
+	opacity: 0.8;
 }
 </style>
