@@ -16,15 +16,14 @@
 			<!-- 头像选择 -->
 			<view class="wam__avatar">
 				<view class="button-shadow">
-					<!-- <button class="button" open-type="chooseAvatar" @chooseavatar="chooseAvatarEvent"> -->
-					<view class="button">
+					<view class="button no-margin-upload circle-upload">
 						<me-upload
 							:file-list="files()"
 							:maxCount="1"
 							:previewFullImage="false"
 							accept="image"
 							@change="uploadSuccess"
-							path="user/logo"
+							path="application/user/logo"
 						>
 							<uv-image
 								v-if="userInfo.avatar"
@@ -40,7 +39,6 @@
 							<uv-icon name="camera-fill" color="#fff"></uv-icon>
 						</view>
 					</view>
-					<!-- </button> -->
 				</view>
 			</view>
 
@@ -255,6 +253,9 @@ export default {
 				&::after {
 					border: none;
 				}
+				display: flex;
+				align-items: center;
+				justify-content: center;
 			}
 
 			.avatar {

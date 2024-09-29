@@ -1,7 +1,7 @@
 <script>
 import config from '@/config';
 import updrade from '@/library/upgrade';
-import { GetApp } from '@/api/system/usercenter';
+import { GetApp } from '@/api/system/application';
 import { useAppStore } from '@/library/store/app';
 import { useUserStore } from '@/library/store/user';
 import { hasToken } from '@/library/auth';
@@ -26,7 +26,9 @@ export default {
 
 		// 已经登录则获取用户信息
 		if (hasToken()) {
-			 userStore.userinfo().catch(()=>{nav.login()});
+			userStore.userinfo().catch(() => {
+				nav.login();
+			});
 		} else {
 			nav.login();
 		}
@@ -85,6 +87,27 @@ uni-page-wrapper {
 .uv-cell {
 	.uv-line {
 		border-bottom: 1px solid #e9ecf0 !important;
+	}
+}
+
+.circle-upload {
+	.uv-upload__wrap__preview__image,
+	.uv-upload__status {
+		border-radius: 50% !important;
+		overflow: hidden;
+	}
+}
+
+.no-margin-upload {
+	.uv-upload__wrap {
+		height: 100%;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.uv-upload__wrap__preview {
+		margin: 0px !important;
 	}
 }
 </style>
