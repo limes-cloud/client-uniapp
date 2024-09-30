@@ -69,7 +69,7 @@ import { setToken } from '@/library/auth';
 import { useAppStore } from '@/library/store/app';
 import { useUserStore } from '@/library/store/user';
 import { nav } from '@/library/nav';
-import { OAuthLogin } from '@/api/system/usercenter';
+import { OAuthLogin } from '@/api/system/application';
 
 const toast = ref();
 const loading = ref(true);

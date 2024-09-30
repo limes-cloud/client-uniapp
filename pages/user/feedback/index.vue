@@ -50,7 +50,7 @@
 import { ref, getCurrentInstance } from 'vue';
 import { useUserStore } from '@/library/store/user';
 import { useAppStore } from '@/library/store/app';
-import { CreateFeedback, ListFeedbackCategory } from '@/api/system/usercenter';
+import { CreateFeedback, ListFeedbackCategory } from '@/api/system/application';
 
 const userStore = useUserStore();
 const appStore = useAppStore();
