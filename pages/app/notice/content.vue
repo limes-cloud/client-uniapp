@@ -42,7 +42,7 @@ getNotice(params).then((res) => {
 	toast.value.loading();
 	data.value = res;
 	title.value = res.title;
-	readNotice(params);
+	// readNotice(params);
 	toast.value.hide();
 });
 </script>

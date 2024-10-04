@@ -17,22 +17,11 @@
 						size="small"
 					></uv-tags>
 				</view>
-				<view class="tag" v-if="!item.is_read">
-					<uv-tags
-						type="warning"
-						plain
-						plainFill
-						borderColor="#ecf5ff"
-						icon="bell-fill"
-						text="未读"
-						size="small"
-					></uv-tags>
-				</view>
 				<text class="uv-line-1">{{ item.title }}</text>
 			</view>
 			<view class="desc">
 				<text class="sub-title">
-					{{ item.desc }}
+					{{ item.description }}
 				</text>
 			</view>
 

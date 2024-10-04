@@ -33,31 +33,31 @@ import newsLogo from '@/static/app-icon/news.png';
 import { nav } from '@/library/nav/index.js';
 const appList = [
 	{
-		title: '党务新闻',
+		title: '学子党音·新闻速递',
 		nav: () => {
 			uni.$global.$to('/pages/app/news/index');
 		},
-		desc: '权威发布党建动态，传递基层好声音',
+		desc: '发布党建新动，瞬息尽在掌握',
 		logo: newsLogo
 	},
+	// {
+	// 	title: '党务公开',
+	// 	nav: () => {
+	// 		uni.$global.$to('/pages/app/video/index');
+	// 	},
+	// 	desc: '知识港湾，智慧灯塔，点亮未来',
+	// 	logo: studyLogo
+	// },
 	{
-		title: '党务公开',
-		nav: () => {
-			uni.$global.$to('/pages/app/video/index');
-		},
-		desc: '知识港湾，智慧灯塔，点亮未来',
-		logo: studyLogo
-	},
-	{
-		title: '系统通知',
+		title: '学子讯通·党务之窗',
 		nav: () => {
 			uni.$global.$to('/pages/app/notice/index');
 		},
-		desc: '传递最新资讯，及时告知重要信息',
+		desc: '速递最新资讯，信息即刻知晓',
 		logo: noticeLogo
 	},
 	{
-		title: '学习资料',
+		title: '学子智库·党建智汇',
 		nav: () => {
 			uni.$global.$to('/pages/app/resource/index');
 		},
@@ -65,7 +65,7 @@ const appList = [
 		logo: resourceLogo
 	},
 	{
-		title: '交流研讨',
+		title: '学子成长·任务之栏',
 		nav: () => {
 			uni.$global.$to('/pages/app/task/index');
 		},

@@ -1,26 +1,26 @@
 <template>
 	<view>
 		<uv-no-network></uv-no-network>
-		<uv-navbar border placeholder auto-back title="党务资料"></uv-navbar>
+		<uv-navbar border placeholder auto-back title="学子智库·党建智汇"></uv-navbar>
 
 		<uv-sticky bgColor="#ffffff" offsetTop="1">
 			<uv-tabs :list="tabList" @click="handleSwitchTab"></uv-tabs>
 		</uv-sticky>
 		<view class="content">
 			<template v-for="item in resourceList" :key="item.id" @click="handleClickResource(item)">
-				<view class="item" v-for="(ite, ind) in resourceList" :key="ind">
-					<uv-avatar shape="square" :size="60" :src="logo(item.resource?.url)"></uv-avatar>
+				<view class="item">
+					<uv-avatar shape="square" :size="60" :src="logo(item.url)"></uv-avatar>
 					<view class="center">
-						<view class="title">{{ ite.title }}</view>
-						<view class="sub-title uv-line-1">{{ ite.desc }}</view>
+						<view class="title">{{ item.title }}</view>
+						<view class="sub-title uv-line-1">{{ item.description }}</view>
 					</view>
 					<view class="button">
 						<uv-button
 							:hairline="false"
 							type="primary"
-							@click="handleDownload($rurl(ite.resource?.url))"
+							@click="handleDownload($rurl(item.url))"
 							:plain="true"
-							:text="isPdf(ite.resource?.url) ? '打开' : '下载'"
+							:text="isPdf(item.url) ? '打开' : '下载'"
 							size="small"
 						></uv-button>
 					</view>
@@ -47,8 +47,8 @@ import zipLogo from '@/static/file-icon/zip.png';
 import xslLogo from '@/static/file-icon/xsl.png';
 import pngLogo from '@/static/file-icon/png.png';
 
-const tabList = ref([{ id: 0, name: '全部' }]);
-const params = ref({ page: 1, page_size: 10, classify_id: 0 });
+const tabList = ref([{ id: undefined, name: '全部' }]);
+const params = ref({ page: 1, pageSize: 10, classifyId: undefined });
 const resourceList = ref([]);
 const loadStatus = ref('loading');
 
@@ -59,7 +59,7 @@ allResourceClassify().then((res) => {
 const fetchData = () => {
 	pageResource(params.value).then((res) => {
 		resourceList.value = res.list;
-		loadStatus.value = res.total <= params.page_size ? 'nomore' : 'loadmore';
+		loadStatus.value = res.total <= params.pageSize ? 'nomore' : 'loadmore';
 	});
 };
 fetchData();
@@ -68,8 +68,8 @@ const handleSwitchTab = (item) => {
 	resourceList.value = [];
 	params.value = {
 		page: 1,
-		page_size: 10,
-		classify_id: item.id
+		pageSize: 10,
+		classifyId: item.id
 	};
 	fetchData();
 };
@@ -102,21 +102,33 @@ const logo = (src) => {
 	if (!src) return fileLogo;
 	const type = src.split('.').pop();
 	switch (type.toLowerCase()) {
-		case ('ppt', 'pptx'):
+		case 'ppt':
+		case 'pptx':
 			return pptLogo;
-		case ('pdf', 'pdfx'):
+		case 'pdf':
+		case 'pdfx':
 			return pdfLogo;
-		case ('doc', 'docx'):
+		case 'doc':
+		case 'docx':
 			return docLogo;
-		case ('xls', 'xlsx'):
+		case 'xls':
+		case 'xlsx':
 			return xslLogo;
-		case ('png', 'jpg', 'jpeg'):
+		case 'png':
+		case 'jpg':
+		case 'jpeg':
 			return pdfLogo;
-		case ('mp4', 'flv', 'avi'):
+		case 'mp4':
+		case 'flv':
+		case 'avi':
 			return mp4Logo;
-		case ('mp3', 'wav'):
+		case 'mp3':
+		case 'wav':
 			return mp3Logo;
-		case ('tar', 'rbr', 'zip', '7z'):
+		case 'tar':
+		case 'rbr':
+		case 'zip':
+		case '7z':
 			return zipLogo;
 		default:
 			return fileLogo;

@@ -7,8 +7,8 @@
 			<uv-tabs :list="tabList" @click="handleSwitchTab"></uv-tabs>
 		</uv-sticky>
 		<view class="content">
-			<NewsCard :list="newsList"></NewsCard>
-			<uv-empty v-if="!newsList.length" mode="data" style="margin-top: 200rpx"></uv-empty>
+			<Card :list="list"></Card>
+			<uv-empty v-if="!list.length" mode="data" style="margin-top: 200rpx"></uv-empty>
 			<uv-load-more v-else line :status="loadStatus" />
 		</view>
 	</view>
@@ -17,33 +17,33 @@
 <script setup>
 import { onReachBottom } from '@dcloudio/uni-app';
 import { ref } from 'vue';
-import { pageNewsContent, allNewsClassify } from '@/api/partyaffairs/news.js';
+import { ListInformation, ListInformationClassify } from '@/api/partyaffairs/information';
 import { nav } from '@/library/nav/index.js';
-import NewsCard from '@/pages/app/news/card.vue';
+import Card from '@/pages/app/news/card.vue';
 
 const tabList = ref([{ id: null, name: '全部' }]);
-const params = ref({ page: 1, page_size: 10, classify_id: null });
-const newsList = ref([]);
+const params = ref({ page: 1, pageSize: 10, classifyId: null });
+const list = ref([]);
 const loadStatus = ref('loading');
 
-allNewsClassify().then((res) => {
+ListInformationClassify().then((res) => {
 	tabList.value = tabList.value.concat(res.list);
 });
 
 const fetchData = () => {
-	pageNewsContent(params.value).then((res) => {
-		newsList.value = newsList.value.concat(res.list);
-		loadStatus.value = res.total <= params.value.page_size ? 'nomore' : 'loadmore';
+	ListInformation(params.value).then((res) => {
+		list.value = list.value.concat(res.list);
+		loadStatus.value = res.total <= params.value.pageSize ? 'nomore' : 'loadmore';
 	});
 };
 fetchData();
 
 const handleSwitchTab = (item) => {
-	newsList.value = [];
+	list.value = [];
 	params.value = {
 		page: 1,
-		page_size: 10,
-		classify_id: item.id
+		pageSize: 10,
+		classifyId: item.id
 	};
 	fetchData();
 };

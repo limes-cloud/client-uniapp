@@ -6,7 +6,7 @@
 			@click="$to('/pages/app/news/content?id=' + item.id)"
 		>
 			<view class="title">
-				<view class="tag" v-if="item.is_top">
+				<view class="tag" v-if="item.isTop">
 					<uv-tags
 						type="success"
 						plain
@@ -17,7 +17,7 @@
 						size="small"
 					></uv-tags>
 				</view>
-				<view class="tag" v-if="!item.is_read">
+				<view class="tag">
 					<uv-tags
 						plain
 						plainFill
@@ -27,7 +27,6 @@
 						size="small"
 					></uv-tags>
 				</view>
-
 				<text class="uv-line-1">{{ item.title }}</text>
 			</view>
 			<text class="sub-title uv-line-2">{{ item.desc }}</text>
@@ -38,12 +37,12 @@
 					radius="4"
 					lazyLoad
 					observeLazyLoad
-					:src="$rurl(item.resource.url)"
+					:src="$rurl(item.cover, 300, 200)"
 				></uv-image>
 			</view>
 			<view class="footer">
 				<text>{{ item.unit }}</text>
-				<text class="time">{{ $ft(item.created_at) }}</text>
+				<text class="time">{{ $ft(item.createdAt) }}</text>
 			</view>
 		</view>
 	</template>

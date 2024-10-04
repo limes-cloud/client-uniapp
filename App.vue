@@ -21,11 +21,9 @@ export default {
 			nav.error(data.disableDesc);
 			return;
 		}
-		console.log('close 1');
 
 		appStore.set({ ...data, query: params.query });
 		updrade();
-		console.log('close 2');
 		uni.hideLoading();
 
 		// 已经登录则获取用户信息

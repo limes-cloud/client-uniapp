@@ -15,7 +15,7 @@ import { ref } from 'vue';
 import { pageTask } from '@/api/partyaffairs/task.js';
 import Card from './card.vue';
 
-const params = ref({ page: 1, page_size: 10 });
+const params = ref({ page: 1, pageSize: 10 });
 const taskList = ref([]);
 const loadStatus = ref('loading');
 
@@ -23,7 +23,7 @@ const fetchData = () => {
 	pageTask(params.value).then((res) => {
 		taskList.value = taskList.value.concat(res.list);
 		console.log(taskList.value);
-		loadStatus.value = res.total <= params.page_size ? 'nomore' : 'loadmore';
+		loadStatus.value = res.total <= params.pageSize ? 'nomore' : 'loadmore';
 	});
 };
 

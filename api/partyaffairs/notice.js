@@ -1,6 +1,6 @@
 import repuest from "@/library/request"
 
-export const pageNotice = (params) => {
+export const ListNotice = (params) => {
 	return repuest({
 		url: "/partyaffairs/client/v1/notices",
 		method: "get",

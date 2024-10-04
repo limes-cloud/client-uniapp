@@ -42,7 +42,7 @@ const isWrite = ref(false);
 const files = ref({});
 
 const fetchData = async () => {
-	const data = await getTaskValue({ task_id: props.id });
+	const data = await getTaskValue({ taskId: props.id });
 	if (data && data.value) {
 		formModel.value = JSON.parse(data.value);
 		isWrite.value = true;
@@ -63,14 +63,18 @@ const handleFiles = async (components, formValue) => {
 	for (let i in components) {
 		const item = components[i];
 		if (item.type === 'upload' && formValue[item.field]) {
-			const data = await GetFileBySha(formValue[item.field]);
-			fileset[item.field] = [
-				{
-					name: data.name,
-					url: data.url,
-					sha: data.sha
-				}
-			];
+			try {
+				const data = await GetFileBySha(formValue[item.field]);
+				fileset[item.field] = [
+					{
+						name: data.name,
+						url: data.url,
+						sha: data.sha
+					}
+				];
+			} catch (e) {
+				toast.value.error('文件资源丢失，请重新上传');
+			}
 		}
 	}
 
@@ -85,7 +89,7 @@ const hasProcess = () => {
 		tip.value = '请在任务规定时间内进行填写';
 		return false;
 	}
-	if (isWrite.value && !data.value.is_update) {
+	if (isWrite.value && !data.value.isUpdate) {
 		tip.value = '您已完成此任务，请勿重复填写';
 		return false;
 	}
@@ -94,7 +98,7 @@ const hasProcess = () => {
 
 const formSubmit = async (value) => {
 	const params = {
-		task_id: Number(props.id),
+		taskId: Number(props.id),
 		value: JSON.stringify(value)
 	};
 	if (isWrite.value) {

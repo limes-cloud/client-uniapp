@@ -3,7 +3,7 @@
 		<view class="card">
 			<view class="title uv-line-1">{{ item.title }}</view>
 			<view class="desc">
-				<view v-for="(ite, ind) in item.desc.split('\n')" :key="ind">{{ ite }}</view>
+				<view v-for="(ite, ind) in item.description.split('\n')" :key="ind">{{ ite }}</view>
 			</view>
 			<view class="time">
 				<view style="margin-bottom: 10rpx">开始时间：{{ $pt(item.start) }}</view>
