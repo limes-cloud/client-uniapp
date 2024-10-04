@@ -132,7 +132,7 @@ const uploadFactory = async (file) => {
 
 	console.log(data);
 	const count = data.chunkCount;
-	const size = data.chunkSize;
+	const size = data.chunkSize * 1024;
 	const uploaed = data.uploadChunks;
 	const taskArr = [];
 
