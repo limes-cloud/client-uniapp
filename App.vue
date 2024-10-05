@@ -55,10 +55,10 @@ page {
 	font-size: 28rpx;
 }
 
-uni-page-wrapper {
-	// 第三方跳转过来的时候会出现滑动异常
-	overflow-y: scroll;
-}
+//uni-page-wrapper {
+//	// 第三方跳转过来的时候会出现滑动异常
+//	overflow-y: scroll;
+//}
 
 .content {
 	padding: 30rpx;
