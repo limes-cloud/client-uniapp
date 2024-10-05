@@ -42,7 +42,10 @@
 			"path": "pages/app/news/content"
 		},
 		{
-			"path": "pages/app/resource/index"
+			"path": "pages/app/resource/index",
+			"style": {
+				"onReachBottomDistance": 200
+			}
 		},
 		{
 			"path": "pages/app/task/index"
@@ -60,7 +63,18 @@
 			"path": "pages/app/video/pdf"
 		},
 		{
-			"path": "pages/app/resource/pdf"
+			"path": "pages/app/resource/pdf",
+			"style": {
+				"navigationStyle": "default",
+				"navigationBarTitleText": "查看文档"
+			}
+		},
+		{
+			"path": "pages/app/resource/video",
+			"style": {
+				"navigationStyle": "default",
+				"navigationBarTitleText": "播放视频"
+			}
 		}
 	],
 	"subPackages": [],

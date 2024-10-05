@@ -1,40 +1,38 @@
 <template>
-	<view>
-		<uv-no-network></uv-no-network>
-		<uv-navbar border placeholder auto-back title="学子智库·党建智汇"></uv-navbar>
+	<uv-no-network></uv-no-network>
+	<uv-navbar border placeholder auto-back title="学子智库·党建智汇"></uv-navbar>
 
-		<uv-sticky bgColor="#ffffff" offsetTop="1">
-			<uv-tabs :list="tabList" @click="handleSwitchTab"></uv-tabs>
-		</uv-sticky>
-		<view class="content">
-			<template v-for="item in resourceList" :key="item.id" @click="handleClickResource(item)">
-				<view class="item">
-					<uv-avatar shape="square" :size="60" :src="logo(item.url)"></uv-avatar>
-					<view class="center">
-						<view class="title">{{ item.title }}</view>
-						<view class="sub-title uv-line-1">{{ item.description }}</view>
-					</view>
-					<view class="button">
-						<uv-button
-							:hairline="false"
-							type="primary"
-							@click="handleDownload($rurl(item.url))"
-							:plain="true"
-							:text="isPdf(item.url) ? '打开' : '下载'"
-							size="small"
-						></uv-button>
-					</view>
+	<uv-sticky bgColor="#ffffff" offsetTop="1">
+		<uv-tabs :list="tabList" @click="handleSwitchTab"></uv-tabs>
+	</uv-sticky>
+	<view class="content">
+		<template v-for="item in resourceList" :key="item.id" @click="handleClickResource(item)">
+			<view class="item">
+				<uv-avatar shape="square" :size="60" :src="logo(item.url)"></uv-avatar>
+				<view class="center">
+					<view class="title">{{ item.title }}</view>
+					<view class="sub-title uv-line-1">{{ item.description }}</view>
 				</view>
-			</template>
-			<uv-empty v-if="!resourceList.length" mode="data" style="margin-top: 200rpx"></uv-empty>
-			<uv-load-more v-else line :status="loadStatus" />
-		</view>
+				<view class="button">
+					<uv-button
+						:hairline="false"
+						type="primary"
+						@click="handleDownload($rurl(item.url))"
+						:plain="true"
+						:text="isPdf(item.url) || isVideo(item.url) ? '打开' : '下载'"
+						size="small"
+					></uv-button>
+				</view>
+			</view>
+		</template>
+		<uv-empty v-if="!resourceList.length" mode="data" style="margin-top: 200rpx"></uv-empty>
+		<uv-load-more v-else line :status="loadStatus" />
 	</view>
 </template>
 
 <script setup>
-import { onReachBottom } from '@dcloudio/uni-app';
 import { ref } from 'vue';
+import { onReachBottom } from '@dcloudio/uni-app';
 import { pageResource, allResourceClassify } from '@/api/partyaffairs/resource.js';
 import { downloadFile } from '@/library/utils/index.js';
 import fileLogo from '@/static/file-icon/file.png';
@@ -59,7 +57,7 @@ allResourceClassify().then((res) => {
 const fetchData = () => {
 	pageResource(params.value).then((res) => {
 		resourceList.value = res.list;
-		loadStatus.value = res.total <= params.pageSize ? 'nomore' : 'loadmore';
+		loadStatus.value = res.list.length <= params.value.pageSize ? 'nomore' : 'loadmore';
 	});
 };
 fetchData();
@@ -80,6 +78,12 @@ const isPdf = (url) => {
 	return ['pdf', 'pdfx'].includes(arr[arr.length - 1]);
 };
 
+const isVideo = (url) => {
+	if (!url) return false;
+	const arr = url.split('.');
+	return ['mp4', 'avi', 'wmv', 'mov', 'm4v'].includes(arr[arr.length - 1]);
+};
+
 const handleDownload = (url) => {
 	if (isPdf(url)) {
 		uni.navigateTo({
@@ -87,6 +91,14 @@ const handleDownload = (url) => {
 		});
 		return;
 	}
+
+	if (isVideo(url)) {
+		uni.navigateTo({
+			url: './video?src=' + url
+		});
+		return;
+	}
+
 	downloadFile(url);
 };
 
@@ -101,6 +113,7 @@ onReachBottom(() => {
 const logo = (src) => {
 	if (!src) return fileLogo;
 	const type = src.split('.').pop();
+	console.log(type);
 	switch (type.toLowerCase()) {
 		case 'ppt':
 		case 'pptx':
@@ -117,7 +130,7 @@ const logo = (src) => {
 		case 'png':
 		case 'jpg':
 		case 'jpeg':
-			return pdfLogo;
+			return pngLogo;
 		case 'mp4':
 		case 'flv':
 		case 'avi':
