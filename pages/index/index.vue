@@ -95,7 +95,7 @@ import { ListBanner } from '@/api/partyaffairs/banner';
 import { ListInformation } from '@/api/partyaffairs/information';
 import { nav } from '@/library/nav';
 import { ListNotice } from '@/api/partyaffairs/notice';
-import { pageTask } from '@/api/partyaffairs/task';
+import { ListTask } from '@/api/partyaffairs/task';
 
 const bannerList = ref([]);
 const noticeList = ref([]);
@@ -117,9 +117,9 @@ ListInformation({ page: 1, pageSize: 3, status: true }).then((res) => {
 	informationList.value = res.list;
 });
 
-// pageTask({ page: 1, page_size: 3, not_finish: true }).then((res) => {
-// 	taskList.value = res.list;
-// });
+ListTask({ page: 1, pageSize: 3, notFinish: true }).then((res) => {
+	taskList.value = res.list;
+});
 
 const handleClickBanner = (index) => {
 	const path = bannerList.value[index].path;

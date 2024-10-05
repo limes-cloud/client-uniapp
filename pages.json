@@ -45,9 +45,6 @@
 			"path": "pages/app/resource/index"
 		},
 		{
-			"path": "pages/app/resource/content"
-		},
-		{
 			"path": "pages/app/task/index"
 		},
 		{

@@ -1,7 +1,7 @@
 import repuest from "@/library/request"
 
 
-export const getTaskValue = (params) => {
+export const GetTaskValue = (params) => {
 	return repuest({
 		url: "/partyaffairs/client/v1/task/value",
 		method: "get",
@@ -9,7 +9,7 @@ export const getTaskValue = (params) => {
 	})
 }
 
-export const addTaskValue = (params) => {
+export const AddTaskValue = (params) => {
 	return repuest({
 		url: "/partyaffairs/client/v1/task/value",
 		method: "post",
@@ -17,7 +17,7 @@ export const addTaskValue = (params) => {
 	})
 }
 
-export const updateTaskValue = (params) => {
+export const UpdateTaskValue = (params) => {
 	return repuest({
 		url: "/partyaffairs/client/v1/task/value",
 		method: "put",

@@ -9,7 +9,7 @@
 				<template v-if="hasProcess()">
 					<view class="title uv-line-1">{{ data.title }}</view>
 					<view class="desc">
-						<view v-for="(ite, ind) in data.desc.split('\n')" :key="ind">{{ ite }}</view>
+						<view v-for="(ite, ind) in data.description.split('\n')" :key="ind">{{ ite }}</view>
 					</view>
 					<me-form
 						:id="data.title"
@@ -27,8 +27,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import { addTaskValue, getTaskValue, updateTaskValue } from '@/api/partyaffairs/taskValue.js';
-import { getTask } from '@/api/partyaffairs/task.js';
+import { AddTaskValue, GetTaskValue, UpdateTaskValue } from '@/api/partyaffairs/taskValue.js';
+import { GetTask } from '@/api/partyaffairs/task';
 import { GetFileBySha } from '@/api/system/resource';
 import formatUrl from '@/library/global/resource.js';
 const toast = ref();
@@ -42,7 +42,7 @@ const isWrite = ref(false);
 const files = ref({});
 
 const fetchData = async () => {
-	const data = await getTaskValue({ taskId: props.id });
+	const data = await GetTaskValue({ taskId: props.id });
 	if (data && data.value) {
 		formModel.value = JSON.parse(data.value);
 		isWrite.value = true;
@@ -50,7 +50,7 @@ const fetchData = async () => {
 	files.value = await handleFiles(components.value, formModel.value);
 };
 
-getTask({ id: props.id }).then((res) => {
+GetTask({ id: props.id }).then((res) => {
 	data.value = res;
 	const config = JSON.parse(res.config);
 	components.value = config;
@@ -102,9 +102,9 @@ const formSubmit = async (value) => {
 		value: JSON.stringify(value)
 	};
 	if (isWrite.value) {
-		await updateTaskValue(params);
+		await UpdateTaskValue(params);
 	} else {
-		await addTaskValue(params);
+		await AddTaskValue(params);
 	}
 	toast.value.success('提交成功');
 };
