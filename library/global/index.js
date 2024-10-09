@@ -2,7 +2,7 @@ import resource from "./resource.js"
 import logo from '@/static/logo.png';
 import {
 	nav
-} from "../nav/index.js"
+} from "@/library/nav/index.js"
 import {
 	formatTime,
 	parseTime

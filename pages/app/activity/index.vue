@@ -36,7 +36,7 @@
 				</view>
 			</view>
 		</view>
-		<uv-empty v-if="!list.length" mode="data" style="margin-top: 200rpx"></uv-empty>
+		<uv-empty v-if="!list.length" mode="data" style="margin-top: 200rpx" text="暂时还没有发布活动"></uv-empty>
 		<uv-load-more v-else line :status="loadStatus" />
 	</view>
 </template>
@@ -44,19 +44,19 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { onReachBottom } from '@dcloudio/uni-app';
-import { ListInformation } from '@/api/poverty/information';
+import { ListActivity } from '@/api/poverty/activity';
 const params = ref({ page: 1, pageSize: 10 });
 const list = ref([]);
 const loadStatus = ref('loading');
 
-const getInformation = async () => {
-	const data = await ListInformation(params.value);
+const getActivity = async () => {
+	const data = await ListActivity(params.value);
 	list.value = list.value.concat(data.list);
 	loadStatus.value = data.list.length < params.value.pageSize ? 'nomore' : 'loadmore';
 };
 
 onMounted(() => {
-	getInformation();
+	getActivity();
 });
 
 onReachBottom(() => {

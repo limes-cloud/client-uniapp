@@ -7,7 +7,7 @@
 			<view class="user" @click="handleNavUser">
 				<view class="logo">
 					<uv-image
-						:src="$user.isLogin ? $rurl($user.avatarUrl, 100, 100) : $logo"
+						:src="$user.isLogin && $user.avatarUrl ? $rurl($user.avatarUrl, 100, 100) : $logo"
 						radius="8rpx"
 						width="120rpx"
 						height="120rpx"

@@ -17,7 +17,6 @@
 				</view>
 			</template>
 		</uv-navbar>
-
 		<view class="content">
 			<view class="item" v-for="(item, index) in list" :key="index">
 				<uv-avatar shape="square" :size="60" :src="logo(item.url)"></uv-avatar>

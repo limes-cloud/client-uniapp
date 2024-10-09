@@ -8,34 +8,34 @@ import { hasToken } from '@/library/auth';
 import { nav } from '@/library/nav';
 
 export default {
-  onLaunch: async function (params) {
-    const userStore = useUserStore();
-    const appStore = useAppStore();
-    appStore.set({});
-    // 获取系统信息
-    uni.showLoading({ title: '加载中', mask: true });
-    const data = await GetApp();
-    if (!data.status) {
-      uni.hideLoading();
-      nav.error(data.disableDesc);
-      return;
-    }
-    appStore.set({ ...data, query: params.query });
-    updrade();
-    uni.hideLoading();
+	onLaunch: async function (params) {
+		const userStore = useUserStore();
+		const appStore = useAppStore();
+		appStore.set({});
+		// 获取系统信息
+		uni.showLoading({ title: '加载中', mask: true });
+		const data = await GetApp();
+		if (!data.status) {
+			uni.hideLoading();
+			nav.error(data.disableDesc);
+			return;
+		}
+		appStore.set({ ...data, query: params.query });
+		updrade();
+		uni.hideLoading();
 
-    // 已经登录则获取用户信息
-    if (hasToken()) {
-      userStore.userinfo().catch(() => {
-        nav.login();
-      });
-    } else {
-      nav.login();
-    }
-  },
-  onShow: function () {},
-  onHide: function () {},
-  methods: {}
+		// 已经登录则获取用户信息
+		if (hasToken()) {
+			userStore.userinfo().catch(() => {
+				nav.login();
+			});
+		} else {
+			nav.login();
+		}
+	},
+	onShow: function () {},
+	onHide: function () {},
+	methods: {}
 };
 </script>
 
@@ -48,11 +48,16 @@ export default {
 @import '@/uni_modules/uv-ui-tools/index.scss';
 /*每个页面公共css */
 @import '@/static/form.scss';
+
 page {
-  background-color: #ffffff;
-  box-sizing: border-box;
-  width: 100%;
-  font-size: 28rpx;
+	background-color: #ffffff;
+	box-sizing: border-box;
+	width: 100%;
+	font-size: 28rpx;
+}
+
+.uv-nav-slot {
+	display: flex;
 }
 
 //uni-page-wrapper {
@@ -61,53 +66,57 @@ page {
 //}
 
 .content {
-  padding: 30rpx;
+	padding: 30rpx;
 }
+
 .margin-top-10 {
-  margin-top: 20rpx;
+	margin-top: 20rpx;
 }
+
 .margin-top-20 {
-  margin-top: 40rpx;
+	margin-top: 40rpx;
 }
+
 .uv-tags--small {
-  height: 14px;
-  line-height: 14px;
-  font-size: $font-xs;
-  padding: 4rpx 6rpx;
+	height: 14px;
+	line-height: 14px;
+	font-size: $font-xs;
+	padding: 4rpx 6rpx;
 
-  .uv-tags__icon {
-    margin-right: 0px !important;
-  }
+	.uv-tags__icon {
+		margin-right: 0px !important;
+	}
 
-  span {
-    white-space: nowrap;
-  }
+	span {
+		white-space: nowrap;
+	}
 }
 
 .uv-cell {
-  .uv-line {
-    border-bottom: 1px solid #e9ecf0 !important;
-  }
+	.uv-line {
+		border-bottom: 1px solid #e9ecf0 !important;
+	}
 }
 
 .circle-upload {
-  .uv-upload__wrap__preview__image,
-  .uv-upload__status {
-    border-radius: 50% !important;
-    overflow: hidden;
-  }
+	.uv-upload__wrap__preview__image,
+	.uv-upload__status {
+		border-radius: 50% !important;
+		overflow: hidden;
+	}
 }
 
 .no-margin-upload {
-  .uv-upload__wrap {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .uv-upload__wrap__preview {
-    margin: 0px !important;
-  }
+	.uv-upload__wrap {
+		height: 100%;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.uv-upload__wrap__preview {
+		margin: 0px !important;
+	}
 }
 </style>
