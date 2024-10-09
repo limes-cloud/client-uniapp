@@ -4,7 +4,7 @@ import crypto from "@/library/crypto"
 
 export const GetCurrentUser = (params) => {
 	return repuest({
-		url: "/usercenter/client/v1/user",
+		url: "/application/client/v1/user",
 		method: "get",
 		params
 	})
@@ -12,7 +12,7 @@ export const GetCurrentUser = (params) => {
 
 export const UpdateCurrentUser = (params) => {
 	return repuest({
-		url: "/usercenter/client/v1/user",
+		url: "/application/client/v1/user",
 		method: "put",
 		params
 	})
@@ -20,14 +20,14 @@ export const UpdateCurrentUser = (params) => {
 
 export const GetApp = () => {
 	return repuest({
-		url: "/usercenter/client/v1/app?keyword=" + config.server,
+		url: "/application/client/v1/app?keyword=" + config.server,
 		method: "get"
 	})
 }
 
 export const GenAuthCaptch = (params) => {
 	return repuest({
-		url: "/usercenter/client/v1/auth/captcha",
+		url: "/application/client/v1/auth/captcha",
 		method: "post",
 		params
 	})
@@ -36,7 +36,7 @@ export const GenAuthCaptch = (params) => {
 
 export const OAuthLogin = (params) => {
 	return repuest({
-		url: "/usercenter/client/v1/login/oauth",
+		url: "/application/client/v1/login/oauth",
 		method: "post",
 		params
 	})
@@ -44,7 +44,7 @@ export const OAuthLogin = (params) => {
 
 export const EmailLogin = (params) => {
 	return repuest({
-		url: "/usercenter/client/v1/login/email",
+		url: "/application/client/v1/login/email",
 		method: "post",
 		params
 	})
@@ -59,7 +59,7 @@ export const PasswordLogin = (ps) => {
 		time: new Date().getTime()
 	})
 	return repuest({
-		url: "/usercenter/client/v1/login/password",
+		url: "/application/client/v1/login/password",
 		method: "post",
 		params
 	})
@@ -67,7 +67,7 @@ export const PasswordLogin = (ps) => {
 
 export const EmailRegister = (params) => {
 	return repuest({
-		url: "/usercenter/client/v1/register/email",
+		url: "/application/client/v1/register/email",
 		method: "post",
 		params
 	})
@@ -82,7 +82,7 @@ export const PasswordRegister = (ps) => {
 		time: new Date().getTime()
 	})
 	return repuest({
-		url: "/usercenter/client/v1/register/password",
+		url: "/application/client/v1/register/password",
 		method: "post",
 		params
 	})
@@ -90,7 +90,7 @@ export const PasswordRegister = (ps) => {
 
 export const EmailBind = (params) => {
 	return repuest({
-		url: "/usercenter/client/v1/bind/email",
+		url: "/application/client/v1/bind/email",
 		method: "post",
 		params
 	})
@@ -105,7 +105,7 @@ export const PasswordBind = (ps) => {
 		time: new Date().getTime()
 	})
 	return repuest({
-		url: "/usercenter/client/v1/bind/password",
+		url: "/application/client/v1/bind/password",
 		method: "post",
 		params
 	})
@@ -113,7 +113,7 @@ export const PasswordBind = (ps) => {
 
 export const RefreshToken = (params) => {
 	return repuest({
-		url: "/usercenter/client/v1/token/refresh",
+		url: "/application/client/v1/token/refresh",
 		method: "post",
 		params
 	})
@@ -121,7 +121,7 @@ export const RefreshToken = (params) => {
 
 export const ListFeedbackCategory = (params) => {
 	return repuest({
-		url: "/usercenter/client/v1/feedback_categories",
+		url: "/application/client/v1/feedback_categories",
 		method: "get",
 		params
 	})
@@ -129,7 +129,7 @@ export const ListFeedbackCategory = (params) => {
 
 export const CreateFeedback = (params) => {
 	return repuest({
-		url: "/usercenter/client/v1/feedback",
+		url: "/application/client/v1/feedback",
 		method: "post",
 		params
 	})
@@ -137,7 +137,7 @@ export const CreateFeedback = (params) => {
 
 export const Logout = () => {
 	return repuest({
-		url: "/usercenter/client/v1/logout",
+		url: "/application/client/v1/logout",
 		method: "post"
 	})
 }

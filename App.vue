@@ -1,41 +1,41 @@
 <script>
 import config from '@/config';
 import updrade from '@/library/upgrade';
-import { GetApp } from '@/api/system/usercenter';
+import { GetApp } from '@/api/system/application';
 import { useAppStore } from '@/library/store/app';
 import { useUserStore } from '@/library/store/user';
 import { hasToken } from '@/library/auth';
 import { nav } from '@/library/nav';
 
 export default {
-	onLaunch: async function (params) {
-		const userStore = useUserStore();
-		const appStore = useAppStore();
-		appStore.set({});
-		// 获取系统信息
-		uni.showLoading({ title: '加载中', mask: true });
-		const data = await GetApp();
-		if (!data.status) {
-			uni.hideLoading();
-			nav.error(data.disableDesc);
-			return;
-		}
-		appStore.set({ ...data, query: params.query });
-		updrade();
-		uni.hideLoading();
+  onLaunch: async function (params) {
+    const userStore = useUserStore();
+    const appStore = useAppStore();
+    appStore.set({});
+    // 获取系统信息
+    uni.showLoading({ title: '加载中', mask: true });
+    const data = await GetApp();
+    if (!data.status) {
+      uni.hideLoading();
+      nav.error(data.disableDesc);
+      return;
+    }
+    appStore.set({ ...data, query: params.query });
+    updrade();
+    uni.hideLoading();
 
-		// 已经登录则获取用户信息
-		if (hasToken()) {
-			userStore.userinfo().catch(() => {
-				nav.login();
-			});
-		} else {
-			nav.login();
-		}
-	},
-	onShow: function () {},
-	onHide: function () {},
-	methods: {}
+    // 已经登录则获取用户信息
+    if (hasToken()) {
+      userStore.userinfo().catch(() => {
+        nav.login();
+      });
+    } else {
+      nav.login();
+    }
+  },
+  onShow: function () {},
+  onHide: function () {},
+  methods: {}
 };
 </script>
 
@@ -49,60 +49,65 @@ export default {
 /*每个页面公共css */
 @import '@/static/form.scss';
 page {
-	background-color: #ffffff;
-	box-sizing: border-box;
-	width: 100%;
-	font-size: 28rpx;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  width: 100%;
+  font-size: 28rpx;
 }
 
-uni-page-wrapper {
-	// 第三方跳转过来的时候会出现滑动异常
-	// overflow-y: scroll;
-}
+//uni-page-wrapper {
+//	// 第三方跳转过来的时候会出现滑动异常
+//	overflow-y: scroll;
+//}
 
 .content {
-	padding: 30rpx;
+  padding: 30rpx;
 }
 .margin-top-10 {
-	margin-top: 20rpx;
+  margin-top: 20rpx;
 }
 .margin-top-20 {
-	margin-top: 40rpx;
+  margin-top: 40rpx;
 }
 .uv-tags--small {
-	height: 14px;
-	line-height: 14px;
-	font-size: $font-xs;
-	padding: 4rpx 6rpx;
+  height: 14px;
+  line-height: 14px;
+  font-size: $font-xs;
+  padding: 4rpx 6rpx;
 
-	.uv-tags__icon {
-		margin-right: 0px !important;
-	}
+  .uv-tags__icon {
+    margin-right: 0px !important;
+  }
 
-	span {
-		white-space: nowrap;
-	}
+  span {
+    white-space: nowrap;
+  }
 }
 
 .uv-cell {
-	.uv-line {
-		border-bottom: 1px solid #e9ecf0 !important;
-	}
+  .uv-line {
+    border-bottom: 1px solid #e9ecf0 !important;
+  }
 }
 
-@mixin flex($direction: row) {
-	/* #ifndef APP-NVUE */
-	display: flex;
-	/* #endif */
-	flex-direction: $direction;
+.circle-upload {
+  .uv-upload__wrap__preview__image,
+  .uv-upload__status {
+    border-radius: 50% !important;
+    overflow: hidden;
+  }
 }
-.uv-nav-slot {
-	@include flex;
-	align-items: center;
-	justify-content: space-between;
-	border: 0.5px solid #fff;
-	border-radius: 100px;
-	padding: 3px 7px;
-	opacity: 0.8;
+
+.no-margin-upload {
+  .uv-upload__wrap {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .uv-upload__wrap__preview {
+    margin: 0px !important;
+  }
 }
 </style>

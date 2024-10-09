@@ -1,7 +1,7 @@
 import config from "@/config"
 import {
 	RefreshToken
-} from "@/api/system/usercenter"
+} from "@/api/system/application"
 
 import {
 	getToken,

@@ -5,7 +5,7 @@ import {
 import {
 	GetCurrentUser,
 	Logout
-} from "@/api/system/usercenter";
+} from "@/api/system/application";
 
 import {
 	nav

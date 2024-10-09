@@ -1,5 +1,5 @@
 <template>
-	<uv-upload :file-list="files" @delete="deleteFile" @afterRead="uploadFile">
+	<uv-upload :file-list="files" @delete="deleteFile" :customStyle="customStyle" @afterRead="uploadFile">
 		<slot></slot>
 	</uv-upload>
 </template>
@@ -35,6 +35,12 @@ const props = defineProps({
 	path: {
 		type: String,
 		require: true
+	},
+	customStyle: {
+		type: Object,
+		default: () => {
+			return {};
+		}
 	}
 });
 
@@ -126,7 +132,7 @@ const uploadFactory = async (file) => {
 
 	console.log(data);
 	const count = data.chunkCount;
-	const size = data.chunkSize;
+	const size = data.chunkSize * 1024;
 	const uploaed = data.uploadChunks;
 	const taskArr = [];
 
