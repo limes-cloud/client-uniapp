@@ -18,7 +18,10 @@
 					<view class="label margin-top-10">uid：{{ $user.id }}</view>
 				</template>
 				<template v-slot:value>
-					<uv-avatar :size="50" :src="$rurl($user.avatarUrl, 100, 100)"></uv-avatar>
+					<uv-avatar
+						:size="60"
+						:src="$user.isLogin && $user.avatarUrl ? $rurl($user.avatarUrl, 100, 100) : $logo"
+					></uv-avatar>
 				</template>
 			</uv-cell>
 		</uv-cell-group>
