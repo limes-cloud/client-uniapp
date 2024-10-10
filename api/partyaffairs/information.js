@@ -9,6 +9,7 @@ export const ListInformationClassify = (params) => {
 }
 
 export const ListInformation = (params) => {
+	params.status = true
 	return repuest({
 		url: "/partyaffairs/client/v1/informations",
 		method: "get",

@@ -24,7 +24,7 @@ import NoticeCard from './card.vue';
 const toastRef = ref();
 const current = ref(0);
 const tabList = ref(['全部', '未读']);
-const params = ref({ page: 1, pageSize: 10, status: true });
+const params = ref({ page: 1, pageSize: 10 });
 const noticeList = ref([]);
 const loadStatus = ref('loading');
 

@@ -109,11 +109,11 @@ ListBanner().then((res) => {
 	bannerList.value = res.list;
 });
 
-ListNotice({ page: 1, pageSize: 3, status: true }).then((res) => {
+ListNotice({ page: 1, pageSize: 3 }).then((res) => {
 	noticeList.value = res.list;
 });
 
-ListInformation({ page: 1, pageSize: 3, status: true }).then((res) => {
+ListInformation({ page: 1, pageSize: 3 }).then((res) => {
 	informationList.value = res.list;
 });
 

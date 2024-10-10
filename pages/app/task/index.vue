@@ -15,7 +15,7 @@ import { ref } from 'vue';
 import { ListTask } from '@/api/partyaffairs/task';
 import Card from './card.vue';
 
-const params = ref({ page: 1, pageSize: 10, status: true });
+const params = ref({ page: 1, pageSize: 10 });
 const taskList = ref([]);
 const loadStatus = ref('loading');
 

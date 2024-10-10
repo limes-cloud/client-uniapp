@@ -1,6 +1,7 @@
 import repuest from "@/library/request"
 
 export const ListNotice = (params) => {
+	params.status = true
 	return repuest({
 		url: "/partyaffairs/client/v1/notices",
 		method: "get",

@@ -22,7 +22,7 @@ import { nav } from '@/library/nav/index.js';
 import Card from '@/pages/app/news/card.vue';
 
 const tabList = ref([{ id: null, name: '全部' }]);
-const params = ref({ page: 1, pageSize: 10, status: true, classifyId: null });
+const params = ref({ page: 1, pageSize: 10, classifyId: null });
 const list = ref([]);
 const loadStatus = ref('loading');
 
