@@ -46,7 +46,7 @@ import xslLogo from '@/static/file-icon/xsl.png';
 import pngLogo from '@/static/file-icon/png.png';
 
 const tabList = ref([{ id: undefined, name: '全部' }]);
-const params = ref({ page: 1, pageSize: 10, classifyId: undefined });
+const params = ref({ page: 1, pageSize: 10, status: true, classifyId: undefined });
 const resourceList = ref([]);
 const loadStatus = ref('loading');
 
