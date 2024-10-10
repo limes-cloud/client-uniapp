@@ -33,7 +33,7 @@ ListInformationClassify().then((res) => {
 const fetchData = () => {
 	ListInformation(params.value).then((res) => {
 		list.value = list.value.concat(res.list);
-		loadStatus.value = res.total <= params.value.pageSize ? 'nomore' : 'loadmore';
+		loadStatus.value = res.list.length <= params.value.pageSize ? 'nomore' : 'loadmore';
 	});
 };
 fetchData();

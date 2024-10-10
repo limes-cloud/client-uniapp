@@ -31,7 +31,7 @@ const loadStatus = ref('loading');
 const fetchData = () => {
 	ListNotice(params.value).then((res) => {
 		noticeList.value = noticeList.value.concat(res.list);
-		loadStatus.value = res.total <= params.value.page_size ? 'nomore' : 'loadmore';
+		loadStatus.value = res.list.length <= params.value.page_size ? 'nomore' : 'loadmore';
 	});
 };
 fetchData();
