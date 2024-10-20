@@ -57,7 +57,7 @@ allResourceClassify().then((res) => {
 const fetchData = () => {
 	pageResource(params.value).then((res) => {
 		resourceList.value = res.list;
-		loadStatus.value = res.list.length <= params.value.pageSize ? 'nomore' : 'loadmore';
+		loadStatus.value = res.list.length < params.value.pageSize ? 'nomore' : 'loadmore';
 	});
 };
 fetchData();

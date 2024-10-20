@@ -18,14 +18,14 @@ import { nav } from '@/library/nav/index.js';
 import Card from '@/pages/app/video/card.vue';
 
 const tabList = ref([{ id: null, name: '全部' }]);
-const params = ref({ page: 1, page_size: 10 });
+const params = ref({ page: 1, pageSize: 10 });
 const classifyList = ref([]);
 const loadStatus = ref('loading');
 
 const fetchData = () => {
 	pageVideoClassify(params.value).then((res) => {
 		classifyList.value = classifyList.value.concat(res.list);
-		loadStatus.value = res.total <= params.value.page_size ? 'nomore' : 'loadmore';
+		loadStatus.value = res.list.length < params.value.pageSize ? 'nomore' : 'loadmore';
 	});
 };
 fetchData();

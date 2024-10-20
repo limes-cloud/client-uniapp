@@ -22,7 +22,7 @@ const loadStatus = ref('loading');
 const fetchData = () => {
 	ListTask(params.value).then((res) => {
 		taskList.value = taskList.value.concat(res.list);
-		loadStatus.value = res.list.length <= params.pageSize ? 'nomore' : 'loadmore';
+		loadStatus.value = res.list.length < params.pageSize ? 'nomore' : 'loadmore';
 	});
 };
 
