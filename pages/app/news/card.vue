@@ -29,7 +29,7 @@
 				</view>
 				<text class="uv-line-1">{{ item.title }}</text>
 			</view>
-			<text class="sub-title uv-line-2">{{ item.desc }}</text>
+			<text class="sub-title uv-line-2">{{ item.description }}</text>
 			<view class="image">
 				<uv-image
 					width="100%"
